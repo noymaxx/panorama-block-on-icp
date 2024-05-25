@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "icp-bitcoin-ai-backend": {
+      "main": "src/icp-bitcoin-ai-backend/main.mo",
+      "type": "motoko"
+    },
+    "icp-bitcoin-ai-frontend": {
+      "dependencies": [
+        "icp-bitcoin-ai-backend"
+      ],
+      "source": [
+        "src/icp-bitcoin-ai-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "icp-bitcoin-ai-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
