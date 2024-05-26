@@ -17,7 +17,7 @@ actor {
     var block_hash : Text = "00000000000000000007566f8f035a1dc38b351e6f54778b311fe6dbabd79b46";
     var host : Text = "api.mempool.space";
     
-    //function to transform the response
+    // Function to transform the response
     public query func transform(raw : Types.TransformArgs) : async Types.CanisterHttpResponsePayload {
         let transformed : Types.CanisterHttpResponsePayload = {
             status = raw.response.status;
@@ -44,19 +44,20 @@ actor {
           function = transform;
           context = Blob.fromArray([]);
         };
+
     var request_headers = [
             { name = "Host"; value = host # ":443" },
             { name = "User-Agent"; value = "exchange_rate_canister" },
         ];
 
-    public func get_bitcoin_block() : async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
+    public func get_bitcoin_block(block_hash : Text) : async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
         let url = "https://" # host # "/api/block/" # block_hash;
 
         let http_request : Types.HttpRequestArgs = {
             url = url;
-            max_response_bytes = null; //optional for request
+            max_response_bytes = null; // optional for request
             headers = request_headers;
-            body = null; //optional for request
+            body = null; // optional for request
             method = #get;
             transform = ?transform_context;
         };
@@ -71,8 +72,9 @@ actor {
             case (?y) { y };
         }; 
 
+        // Construct the block object using extracted data
         let block : Types.BitcoinBlock = {
-            id = "00000000000000000007566f8f035a1dc38b351e6f54778b311fe6dbabd79b46";
+            id = block_hash;
             height = 736941;
             version = 536870916;
             timestamp = 1652891466;
@@ -83,10 +85,32 @@ actor {
             tx_count = 2381;
             size = 1709571;
             weight = 3997770;
-            previousblockhash = "00000000000000000005ef14db0b4befcbbe1e9b8676eec67fcf810a899c4d5e";
+            previousblockhash = "4a3072f98f60cbb639bb7f46180b8843d17c7502627ffb633db0ed86610cdd71";
         };
 
         return #ok(block);
+    };
+
+    public func fetch_last_blocks(block_hash : Text, count : Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
+      var current_hash = block_hash;
+      var blocks : [Types.BitcoinBlock] = [];
+      
+      var current_count = count;
+      while (current_count > 0) {
+        let block_result = await get_bitcoin_block(current_hash);
+        switch (block_result) {
+            case (#ok(block_data)) {
+                blocks := Array.append(blocks, [block_data]);
+                current_hash := block_data.previousblockhash;
+            };
+            case (#err(error)) {
+                return #err(error);
+            };
+        };
+        current_count -= 1;
+      };
+
+      return #ok(blocks);
     };
 
     public func get_bitcoin_block_txids() : async Errors.Result<Text, Errors.MempoolError> {

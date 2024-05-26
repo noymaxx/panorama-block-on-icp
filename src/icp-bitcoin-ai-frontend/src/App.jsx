@@ -1,31 +1,46 @@
-import { useState } from 'react';
-import { icp_bitcoin_ai_backend } from 'declarations/icp-bitcoin-ai-backend';
+import React, { useState } from "react";
+import { Actor, HttpAgent } from "@dfinity/agent";
 
-function App() {
-  const [greeting, setGreeting] = useState('');
+const BitcoinBlockInfo = () => {
+  const [bitcoinBlock, setBitcoinBlock] = useState(null);
+  const [error, setError] = useState(null);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    icp_bitcoin_ai_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
+  const getBitcoinBlockInfo = async () => {
+    try {
+      const actor = await Actor.createActor(canisterId, {
+        agent: new HttpAgent(),
+      });
+
+      const block = await actor.get_bitcoin_block();
+      setBitcoinBlock(block);
+    } catch (err) {
+      setError(err);
+    }
+  };
 
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
+    <div>
+      <h1>Bitcoin Block Info</h1>
+      <button onClick={getBitcoinBlockInfo}>Get Block Info</button>
+      {bitcoinBlock && (
+        <div>
+          <p>ID: {bitcoinBlock.id}</p>
+          <p>Height: {bitcoinBlock.height}</p>
+          <p>Version: {bitcoinBlock.version}</p>
+          <p>Timestamp: {bitcoinBlock.timestamp}</p>
+          <p>Bits: {bitcoinBlock.bits}</p>
+          <p>Nonce: {bitcoinBlock.nonce}</p>
+          <p>Difficulty: {bitcoinBlock.difficulty}</p>
+          <p>Merkle Root: {bitcoinBlock.merkle_root}</p>
+          <p>Transaction Count: {bitcoinBlock.tx_count}</p>
+          <p>Size: {bitcoinBlock.size}</p>
+          <p>Weight: {bitcoinBlock.weight}</p>
+          <p>Previous Block Hash: {bitcoinBlock.previousblockhash}</p>
+        </div>
+      )}
+      {error && <p>Error: {error}</p>}
+    </div>
   );
-}
+};
 
-export default App;
+export default BitcoinBlockInfo;

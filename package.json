@@ -14,5 +14,11 @@
   "type": "module",
   "workspaces": [
     "src/icp-bitcoin-ai-frontend"
-  ]
+  ],
+  "dependencies": {
+    "json": "^11.0.0",
+    "JSON": "^1.0.0",
+    "mops": "^3.0.2",
+    "node": "^18.20.3"
+  }
 }
