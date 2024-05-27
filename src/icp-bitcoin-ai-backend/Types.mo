@@ -61,7 +61,7 @@ module Types {
         timestamp : Nat;
         bits : Nat;
         nonce : Nat;
-        difficulty : Nat;
+        difficulty : Float;
         merkle_root : Text;
         tx_count : Nat;
         size : Nat;
@@ -71,5 +71,10 @@ module Types {
 
     public type BitcoinTransaction = {
         txid: [Text];
-    }
+    };
+
+    public type JsonOptions = {
+        renameKeys : ?[None];
+        use_icrc_3_value_type : Bool;
+    };
 };

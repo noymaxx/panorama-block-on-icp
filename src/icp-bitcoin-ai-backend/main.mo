@@ -3,12 +3,9 @@ import Errors "Errors";
 import Debug "mo:base/Debug";
 import Blob "mo:base/Blob";
 import Cycles "mo:base/ExperimentalCycles";
-import Error "mo:base/Error";
 import Array "mo:base/Array";
-import Nat8 "mo:base/Nat8";
-import Nat64 "mo:base/Nat64";
 import Text "mo:base/Text";
-import Result "mo:base/Result";
+import JSON "mo:serde/JSON";
 
 // Actor
 actor {
@@ -72,23 +69,19 @@ actor {
             case (?y) { y };
         }; 
 
-        // Construct the block object using extracted data
-        let block : Types.BitcoinBlock = {
-            id = block_hash;
-            height = 736941;
-            version = 536870916;
-            timestamp = 1652891466;
-            bits = 386466234;
-            nonce = 3514220842;
-            difficulty = 31251101365711;
-            merkle_root = "4a3072f98f60cbb639bb7f46180b8843d17c7502627ffb633db0ed86610cdd71";
-            tx_count = 2381;
-            size = 1709571;
-            weight = 3997770;
-            previousblockhash = "4a3072f98f60cbb639bb7f46180b8843d17c7502627ffb633db0ed86610cdd71";
+        let json_result = JSON.fromText(decoded_text, null);
+        let json_blob = switch (json_result) {
+            case (#ok(blob)) { blob };
+            case (#err(e)) { return #err({message = "Failed to parse JSON: " # e}) };
         };
 
-        return #ok(block);
+        Debug.print("JSON recebido: " # decoded_text);
+
+        let block : ?Types.BitcoinBlock = from_candid(json_blob);
+        switch (block) {
+            case (?b) { return #ok(b) };
+            case (null) { return #err({message = "Failed to convert JSON to BitcoinBlock"}) };
+        };
     };
 
     public func fetch_last_blocks(block_hash : Text, count : Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
