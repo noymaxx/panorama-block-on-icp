@@ -69,8 +69,47 @@ module Types {
         previousblockhash : Text;
     };
 
-    public type BitcoinTransaction = {
-        txid: [Text];
+    public type BitcoinTxStatus = {
+        confirmed: Bool;
+        block_height: Nat;
+        block_hash: Text;
+        block_time: Nat;
+    };
+
+    // Estrutura para a entrada da transação
+    public type BitcoinTxInput = {
+        txid: Text;
+        vout: Nat;
+        scriptsig: {
+            scriptsig_asm: Text;
+            scriptsig_hex: Text;
+        };
+        sequence: Nat;
+    };
+
+    // Estrutura para a saída da transação
+    public type BitcoinTxOutput = {
+        value: Nat;
+        n: Nat;
+        scriptpubkey: {
+            scriptpubkey_asm: Text;
+            scriptpubkey_hex: Text;
+            scriptpubkey_reqSigs: ?Nat;
+            scriptpubkey_type: Text;
+            scriptpubkey_address: [Text];
+        };
+    };
+
+    public type BitcoinTx = {
+        txid: Text;
+        version: Int;
+        locktime: Nat;
+        vin: [BitcoinTxInput];
+        vout: [BitcoinTxOutput];
+        size: Nat;
+        weight: Nat;
+        fee: Nat;
+        status: BitcoinTxStatus;
     };
 
     public type JsonOptions = {

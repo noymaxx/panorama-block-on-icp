@@ -11,7 +11,6 @@ import JSON "mo:serde/JSON";
 actor {
 
     var ic : Types.IC = actor ("aaaaa-aa");
-    var block_hash : Text = "00000000000000000007566f8f035a1dc38b351e6f54778b311fe6dbabd79b46";
     var host : Text = "api.mempool.space";
     
     // Function to transform the response
@@ -104,7 +103,7 @@ actor {
       return #ok(blocks);
     };
 
-    public func get_bitcoin_block_txids() : async Errors.Result<Text, Errors.MempoolError> {
+    public func get_bitcoin_block_txids(block_hash : Text) : async Errors.Result<Text, Errors.MempoolError> {
         let url_txids = "https://api.mempool.space/api/block/" # block_hash # "/txids";
 
         let http_request_txids : Types.HttpRequestArgs = {
@@ -129,5 +128,47 @@ actor {
         let txids : Text = decoded_text_txids;
 
         return #ok(txids);
+    };
+
+    public func get_bitcoin_tx(txid : Text) : async Errors.Result<Types.BitcoinTx, Errors.MempoolError> {
+        let url_tx = "https://api.mempool.space/api/tx/" # txid;
+
+        let http_request_tx : Types.HttpRequestArgs = {
+            url = url_tx;
+            max_response_bytes = null;
+            headers = request_headers;
+            body = null;
+            method = #get;
+            transform = ?transform_context;
+        };
+
+        Cycles.add(1_603_128_800);
+
+        let http_response_tx : Types.HttpResponsePayload = await ic.http_request(http_request_tx);
+
+        // Check if the response body is not empty
+        if (http_response_tx.body.size() == 0) {
+            return #err({message = "Empty response body"});
+        };
+
+        let response_body_tx: Blob = Blob.fromArray(http_response_tx.body);
+        let decoded_text_tx: Text = switch (Text.decodeUtf8(response_body_tx)) {
+            case (null) { "No value returned" };
+            case (?y) { y };
+        };
+        
+        Debug.print("Decoded text: " # decoded_text_tx);
+
+        let json_result_tx = JSON.fromText(decoded_text_tx, null);
+        let json_blob_tx = switch (json_result_tx) {
+            case (#ok(blob)) { blob };
+            case (#err(e)) { return #err({message = "Failed to parse JSON: " # e}) };
+        };
+
+        let tx : ?Types.BitcoinTx = from_candid(json_blob_tx);
+        switch (tx) {
+            case (?b) { return #ok(b) };
+            case (null) { return #err({message = "Failed to convert JSON to BitcoinTx"}) };
+        };
     };
 };
