@@ -75,8 +75,6 @@ actor {
             case (#err(e)) { return #err({message = "Failed to parse JSON: " # e}) };
         };
 
-        Debug.print("JSON recebido: " # decoded_text);
-
         let block : ?Types.BitcoinBlock = from_candid(json_blob);
         switch (block) {
             case (?b) { return #ok(b) };
