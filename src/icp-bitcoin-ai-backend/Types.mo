@@ -69,47 +69,50 @@ module Types {
         previousblockhash : Text;
     };
 
-    public type BitcoinTxStatus = {
+    public type TransactionData = {
+        txid: Text;
+        version: Nat;
+        locktime: Nat;
+        size: Nat;
+        weight: Nat;
+        sigops: Nat;
+        fee: Nat;
+        status: TransactionStatus;
+    };
+
+    type VinData = {
+        txid: Text;
+        vout: Nat;
+        prevout: PrevoutData;
+        scriptsig: Text;
+        scriptsig_asm: Text;
+        witness: [Text];
+        is_coinbase: Bool;
+        sequence: Nat;
+        inner_witnessscript_asm: Text;
+    };
+
+    type PrevoutData = {
+        scriptpubkey: Text;
+        scriptpubkey_asm: Text;
+        scriptpubkey_type: Text;
+        scriptpubkey_address: Text;
+        value: Nat;
+    };
+
+    type VoutData = {
+        scriptpubkey: Text;
+        scriptpubkey_asm: Text;
+        scriptpubkey_type: Text;
+        scriptpubkey_address: Text;
+        value: Nat;
+    };
+
+    type TransactionStatus = {
         confirmed: Bool;
         block_height: Nat;
         block_hash: Text;
         block_time: Nat;
-    };
-
-    // Estrutura para a entrada da transação
-    public type BitcoinTxInput = {
-        txid: Text;
-        vout: Nat;
-        scriptsig: {
-            scriptsig_asm: Text;
-            scriptsig_hex: Text;
-        };
-        sequence: Nat;
-    };
-
-    // Estrutura para a saída da transação
-    public type BitcoinTxOutput = {
-        value: Nat;
-        n: Nat;
-        scriptpubkey: {
-            scriptpubkey_asm: Text;
-            scriptpubkey_hex: Text;
-            scriptpubkey_reqSigs: ?Nat;
-            scriptpubkey_type: Text;
-            scriptpubkey_address: [Text];
-        };
-    };
-
-    public type BitcoinTx = {
-        txid: Text;
-        version: Int;
-        locktime: Nat;
-        vin: [BitcoinTxInput];
-        vout: [BitcoinTxOutput];
-        size: Nat;
-        weight: Nat;
-        fee: Nat;
-        status: BitcoinTxStatus;
     };
 
     public type JsonOptions = {
