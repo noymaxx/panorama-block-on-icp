@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+
+  .button {
+    padding: 20px;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.9;
+    }
+  }
+
+  .wallet {
+    min-width: 240px;
+    color: white;
+    background-color: #582CFF;
+    border-radius: 12px;
+  }
+}
+

@@ -1,3 +1,46 @@
 .login {
   display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+
+  .main {
+    background-image: url("/background.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    width: 60%;
+    height: 100%;
+  }
+
+  .start {
+    flex: 1;
+    height: 100%;
+    background-color: #001204;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    .container {
+      .intro {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        color: white;
+        margin-bottom: 40px;
+        cursor: default;
+
+        h2 {
+          font-size: 32px;
+          font-weight: bold;
+        }
+
+        p {
+          font-size: 16px;
+          color: #A0AEC0;
+        }
+      }
+    }
+  }
 }
