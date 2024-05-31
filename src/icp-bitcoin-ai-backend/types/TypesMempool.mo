@@ -114,9 +114,4 @@ module Types {
         block_hash: Text;
         block_time: Timestamp;
     };
-
-    public type JsonOptions = {
-        renameKeys : ?[None];
-        use_icrc_3_value_type : Bool;
-    };
 };

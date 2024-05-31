@@ -1,11 +1,7 @@
 {
   "canisters": {
-    "mempoolConnection": {
-      "main": "src/icp-bitcoin-ai-backend/mempoolConnection.mo",
-      "type": "motoko"
-    },
-    "bitcoinApp": {
-      "main": "src/icp-bitcoin-ai-backend/bitcoinApp.mo",
+    "bitcoinConnection": {
+      "main": "src/icp-bitcoin-ai-backend/bitcoinConnection.mo",
       "type": "motoko"
     },
     "icp-bitcoin-ai-frontend": {
