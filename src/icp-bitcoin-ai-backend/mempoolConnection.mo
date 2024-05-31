@@ -128,6 +128,8 @@ actor {
     };
 
     public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Types.TransactionData, Errors.MempoolError> {
+
+        let TxKeys = ["txid", "version", "vin", "vout", "size", "weight", "sigops", "fee", "status"];
         let url_tx = "https://api.mempool.space/api/tx/" # txid;
 
         let http_request_tx : Types.HttpRequestArgs = {
@@ -154,10 +156,20 @@ actor {
             case (?y) { y };
         };
 
-        let #ok(blob) : { #err : Text; #ok : Blob } = JSON.fromText(jsonText, null);
+        let json_result = JSON.fromText(jsonText, null);
+        let json_blob = switch (json_result) {
+            case (#ok(blob)) { blob };
+            case (#err(e)) {
+                return #err({ message = "Failed to parse JSON: " # e });
+            };
+        };
 
-        let txData : ?Types.TransactionData = from_candid (blob);
-        #ok(txData);
+        let txData : ?Types.TransactionData = from_candid (json_blob);
+        switch (txData) {
+            case (tx) { return #ok(tx) };
+            case (null) {
+                return #err({ message = "Failed to convert JSON to TransactionData" });
+            };
+        }
     };
 };
-

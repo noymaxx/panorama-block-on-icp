@@ -71,8 +71,10 @@ module Types {
 
     public type TransactionData = {
         txid: Text;
-        version: Nat;
-        locktime: Nat;
+        version: Nat32;
+        locktime: Nat32;
+        vin: [VinData];
+        vout: [VoutData];
         size: Nat;
         weight: Nat;
         sigops: Nat;
@@ -80,19 +82,17 @@ module Types {
         status: TransactionStatus;
     };
 
-    type VinData = {
+    public type VinData = {
         txid: Text;
-        vout: Nat;
-        prevout: PrevoutData;
+        vout: Nat32;
+        prevout: ?PrevoutData;
         scriptsig: Text;
         scriptsig_asm: Text;
-        witness: [Text];
         is_coinbase: Bool;
-        sequence: Nat;
-        inner_witnessscript_asm: Text;
+        sequence: Nat32;
     };
 
-    type PrevoutData = {
+    public type PrevoutData = {
         scriptpubkey: Text;
         scriptpubkey_asm: Text;
         scriptpubkey_type: Text;
@@ -100,7 +100,7 @@ module Types {
         value: Nat;
     };
 
-    type VoutData = {
+    public type VoutData = {
         scriptpubkey: Text;
         scriptpubkey_asm: Text;
         scriptpubkey_type: Text;
@@ -108,11 +108,11 @@ module Types {
         value: Nat;
     };
 
-    type TransactionStatus = {
+    public type TransactionStatus = {
         confirmed: Bool;
         block_height: Nat;
         block_hash: Text;
-        block_time: Nat;
+        block_time: Timestamp;
     };
 
     public type JsonOptions = {
