@@ -1,8 +1,11 @@
 import React from 'react'
 import styles from './login-styles.module.scss'
 import Button from '../../components/button/button'
+import { useNavigate } from 'react-router-dom'
 
 const Login: React.FC = () => {
+  const navigate = useNavigate()
+
   return (
     <div className={styles.login}>
       <div className={styles.main}>
@@ -13,7 +16,7 @@ const Login: React.FC = () => {
             <h2>Nice to see you!</h2>
             <p>Enter you wallet to start</p>
           </div>
-          <Button title="CONNECT WALLET" type="wallet" />
+          <Button title="CONNECT WALLET" type="wallet" onClick={() => { navigate('/home') }} />
         </div>
       </div>
     </div>

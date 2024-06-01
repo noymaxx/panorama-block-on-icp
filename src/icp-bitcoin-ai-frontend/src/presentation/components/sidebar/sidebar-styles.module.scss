@@ -1,0 +1,29 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 100%;
+  min-width: 240px;
+  max-width: 300px;
+
+  background: linear-gradient(94.84deg, rgba(6, 11, 38, 1) 60.3%, rgba(16, 27, 82, 0.863) 100%);
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    margin-bottom: 16px;
+
+    img {
+      width: 140px;
+
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+      cursor: pointer;
+    }
+  }
+}
