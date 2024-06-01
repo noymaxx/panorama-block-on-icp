@@ -1,5 +1,5 @@
-import Types "Types";
-import Errors "Errors";
+import Types "./TypesMempool";
+import Errors "./Errors";
 import Debug "mo:base/Debug";
 import Blob "mo:base/Blob";
 import Cycles "mo:base/ExperimentalCycles";
@@ -128,6 +128,7 @@ actor {
     };
 
     public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Types.TransactionData, Errors.MempoolError> {
+
         let url_tx = "https://api.mempool.space/api/tx/" # txid;
 
         let http_request_tx : Types.HttpRequestArgs = {
@@ -154,10 +155,62 @@ actor {
             case (?y) { y };
         };
 
-        let #ok(blob) : { #err : Text; #ok : Blob } = JSON.fromText(jsonText, null);
+        let json_result = JSON.fromText(jsonText, null);
+        let json_blob = switch (json_result) {
+            case (#ok(blob)) { blob };
+            case (#err(e)) {
+                return #err({ message = "Failed to parse JSON: " # e });
+            };
+        };
 
-        let txData : ?Types.TransactionData = from_candid (blob);
-        #ok(txData);
+        let txData : ?Types.TransactionData = from_candid (json_blob);
+        switch (txData) {
+            case (tx) { return #ok(tx) };
+            case (null) {
+                return #err({ message = "Failed to convert JSON to TransactionData" });
+            };
+        }
+    };
+
+        // Define the ManagementCanisterActor with necessary Bitcoin methods
+    type ManagementCanisterActor = actor {
+        bitcoin_get_balance: {
+            address: Text;
+            network: Text;
+            min_confirmations: ?Nat32;
+        } -> async Errors.Result<Nat, Text>;
+    };
+    
+
+    // Define the Bitcoin network
+    public type Network = {
+        #Mainnet;
+        #Testnet;
+    };
+
+    let management_canister_actor : ManagementCanisterActor = actor("aaaaa-aa");
+
+    // Function to get the balance of a Bitcoin address
+    public func get_balance(network: Network, address: Text): async Errors.Result<Nat, Text> {
+        let network_text = switch (network) {
+            case (#Mainnet) "mainnet";
+            case (#Testnet) "testnet";
+        };
+
+        // Add cycles for the API call
+        ExperimentalCycles.add<system>(10_000_000_000);
+
+        // Make the API call to get the balance
+        let balance_result = await management_canister_actor.bitcoin_get_balance({
+            address = address;
+            network = network_text;
+            min_confirmations = null;
+        });
+
+        // Return the balance or an error
+        switch (balance_result) {
+            case (#ok(balance)) { return #ok(balance) };
+            case (#err(error_message)) { return #err(error_message) };
+        }
     };
 };
-
