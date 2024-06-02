@@ -1,6 +1,10 @@
 {
   "canisters": {
-
+    "main": {
+      "dependencies": ["cryptoQuant", "mempool", "users"],
+      "main": "src/icp-bitcoin-ai-backend/main.mo",
+      "type": "motoko"
+    },
     "cryptoQuant": {
       "main": "src/icp-bitcoin-ai-backend/cryptoQuant.mo",
       "type": "motoko"
@@ -9,9 +13,12 @@
       "main": "src/icp-bitcoin-ai-backend/mempool.mo",
       "type": "motoko"
     },
-
+    "users": {
+      "main": "src/icp-bitcoin-ai-backend/users.mo",
+      "type": "motoko"
+    },
     "icp-bitcoin-ai-frontend": {
-      "dependencies": ["cryptoQuant", "mempool"],
+      "dependencies": ["cryptoQuant", "mempool", "users", "main"],
       "source": ["src/icp-bitcoin-ai-frontend/dist"],
       "type": "assets",
       "workspace": "icp-bitcoin-ai-frontend"
