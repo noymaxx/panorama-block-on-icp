@@ -1,4 +1,12 @@
 .home {
+  display: flex;
   width: 100vw;
   height: 100vh;
+
+  .container {
+    width: 85vw;
+    background-color: #060722;
+    padding: 40px 0;
+    display: flex;
+  }
 }
