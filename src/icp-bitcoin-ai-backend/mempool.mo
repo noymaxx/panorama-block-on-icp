@@ -1,5 +1,5 @@
-import Types "Types";
-import Errors "Errors";
+import Types "./TypesMempool";
+import Errors "./Errors";
 import Debug "mo:base/Debug";
 import Blob "mo:base/Blob";
 import Cycles "mo:base/ExperimentalCycles";
@@ -38,6 +38,21 @@ actor {
         { name = "Host"; value = host # ":443" },
         { name = "User-Agent"; value = "mempool_canister" }
     ];
+
+     // Nova função para processar o bloco em tempo real
+    public func process_real_time_block(block_hash: Text) : async Errors.Result<Text, Errors.MempoolError> {
+        let result = await get_bitcoin_block(block_hash);
+        switch (result) {
+            case (#ok(block)) {
+                // Aqui você pode adicionar lógica para processar o bloco
+                Debug.print(debug_show(block));
+                return #ok("Block processed successfully");
+            };
+            case (#err(error)) {
+                return #err(error);
+            };
+        }
+    };
 
     public func get_bitcoin_block(block_hash: Text): async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
         let url = "https://" # host # "/api/block/" # block_hash;
@@ -127,9 +142,8 @@ actor {
         return #ok(txids);
     };
 
-    public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Types.TransactionData, Errors.MempoolError> {
+    public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Text, Errors.MempoolError> {
 
-        let TxKeys = ["txid", "version", "vin", "vout", "size", "weight", "sigops", "fee", "status"];
         let url_tx = "https://api.mempool.space/api/tx/" # txid;
 
         let http_request_tx : Types.HttpRequestArgs = {
@@ -156,7 +170,32 @@ actor {
             case (?y) { y };
         };
 
-        let json_result = JSON.fromText(jsonText, null);
+        return #ok(?jsonText);        
+    };
+
+    public func get_address_info(address: Text): async Errors.Result<Types.AddressInfo, Errors.MempoolError> {
+        let url = "https://" # host # "/api/address/" # address;
+
+        let http_request: Types.HttpRequestArgs = {
+            url = url;
+            max_response_bytes = null;
+            headers = request_headers;
+            body = null;
+            method = #get;
+            transform = ?transform_context;
+        };
+
+        ExperimentalCycles.add<system>(230_949_972_000);
+
+        let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
+
+        let response_body: Blob = Blob.fromArray(http_response.body);
+        let decoded_text: Text = switch (Text.decodeUtf8(response_body)) {
+            case (null) { "No value returned" };
+            case (?y) { y };
+        };
+
+        let json_result = JSON.fromText(decoded_text, null);
         let json_blob = switch (json_result) {
             case (#ok(blob)) { blob };
             case (#err(e)) {
@@ -164,11 +203,11 @@ actor {
             };
         };
 
-        let txData : ?Types.TransactionData = from_candid (json_blob);
-        switch (txData) {
-            case (tx) { return #ok(tx) };
+        let block: ?Types.AddressInfo = from_candid(json_blob);
+        switch (block) {
+            case (?b) { return #ok(b) };
             case (null) {
-                return #err({ message = "Failed to convert JSON to TransactionData" });
+                return #err({ message = "Failed to convert JSON to BitcoinBlock" });
             };
         }
     };

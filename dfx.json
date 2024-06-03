@@ -1,15 +1,15 @@
 {
   "canisters": {
-    "mempoolConnection": {
-      "main": "src/icp-bitcoin-ai-backend/mempoolConnection.mo",
+    "cryptoQuant": {
+      "main": "src/icp-bitcoin-ai-backend/cryptoQuant.mo",
       "type": "motoko"
     },
-    "bitcoinApp": {
-      "main": "src/icp-bitcoin-ai-backend/bitcoinApp.mo",
+    "mempool": {
+      "main": "src/icp-bitcoin-ai-backend/mempool.mo",
       "type": "motoko"
     },
     "icp-bitcoin-ai-frontend": {
-      "dependencies": ["mempoolConnection", "bitcoinApp"],
+      "dependencies": ["cryptoQuant", "mempool"],
       "source": ["src/icp-bitcoin-ai-frontend/dist"],
       "type": "assets",
       "workspace": "icp-bitcoin-ai-frontend"
@@ -24,3 +24,4 @@
   "output_env_file": ".env",
   "version": 1
 }
+
