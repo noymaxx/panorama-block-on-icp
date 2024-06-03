@@ -9,7 +9,7 @@ const Home: React.FC = () => {
     <div className={styles.home}>
       <Sidebar actual={actual} onChange={(coin) => setActual(coin)} />
       <div className={styles.container}>
-        <Hashblocks />
+        <Hashblocks coin={actual} />
       </div>
     </div>
   )
