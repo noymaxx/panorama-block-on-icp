@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Actor, HttpAgent } from "@dfinity/agent";
+import { Actor, HttpAgent } from "@dfinity/agent/lib/cjs";
 
 const BitcoinBlockInfo = () => {
   const [bitcoinBlock, setBitcoinBlock] = useState(null);

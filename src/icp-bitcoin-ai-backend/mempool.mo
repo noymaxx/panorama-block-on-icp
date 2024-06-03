@@ -39,6 +39,21 @@ actor {
         { name = "User-Agent"; value = "mempool_canister" }
     ];
 
+     // Nova função para processar o bloco em tempo real
+    public func process_real_time_block(block_hash: Text) : async Errors.Result<Text, Errors.MempoolError> {
+        let result = await get_bitcoin_block(block_hash);
+        switch (result) {
+            case (#ok(block)) {
+                // Aqui você pode adicionar lógica para processar o bloco
+                Debug.print(debug_show(block));
+                return #ok("Block processed successfully");
+            };
+            case (#err(error)) {
+                return #err(error);
+            };
+        }
+    };
+
     public func get_bitcoin_block(block_hash: Text): async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
         let url = "https://" # host # "/api/block/" # block_hash;
 
@@ -127,7 +142,7 @@ actor {
         return #ok(txids);
     };
 
-    public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Types.TransactionData, Errors.MempoolError> {
+    public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Text, Errors.MempoolError> {
 
         let url_tx = "https://api.mempool.space/api/tx/" # txid;
 
@@ -155,7 +170,32 @@ actor {
             case (?y) { y };
         };
 
-        let json_result = JSON.fromText(jsonText, null);
+        return #ok(?jsonText);        
+    };
+
+    public func get_address_info(address: Text): async Errors.Result<Types.AddressInfo, Errors.MempoolError> {
+        let url = "https://" # host # "/api/address/" # address;
+
+        let http_request: Types.HttpRequestArgs = {
+            url = url;
+            max_response_bytes = null;
+            headers = request_headers;
+            body = null;
+            method = #get;
+            transform = ?transform_context;
+        };
+
+        ExperimentalCycles.add<system>(230_949_972_000);
+
+        let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
+
+        let response_body: Blob = Blob.fromArray(http_response.body);
+        let decoded_text: Text = switch (Text.decodeUtf8(response_body)) {
+            case (null) { "No value returned" };
+            case (?y) { y };
+        };
+
+        let json_result = JSON.fromText(decoded_text, null);
         let json_blob = switch (json_result) {
             case (#ok(blob)) { blob };
             case (#err(e)) {
@@ -163,54 +203,12 @@ actor {
             };
         };
 
-        let txData : ?Types.TransactionData = from_candid (json_blob);
-        switch (txData) {
-            case (tx) { return #ok(tx) };
+        let block: ?Types.AddressInfo = from_candid(json_blob);
+        switch (block) {
+            case (?b) { return #ok(b) };
             case (null) {
-                return #err({ message = "Failed to convert JSON to TransactionData" });
+                return #err({ message = "Failed to convert JSON to BitcoinBlock" });
             };
-        }
-    };
-
-        // Define the ManagementCanisterActor with necessary Bitcoin methods
-    type ManagementCanisterActor = actor {
-        bitcoin_get_balance: {
-            address: Text;
-            network: Text;
-            min_confirmations: ?Nat32;
-        } -> async Errors.Result<Nat, Text>;
-    };
-    
-
-    // Define the Bitcoin network
-    public type Network = {
-        #Mainnet;
-        #Testnet;
-    };
-
-    let management_canister_actor : ManagementCanisterActor = actor("aaaaa-aa");
-
-    // Function to get the balance of a Bitcoin address
-    public func get_balance(network: Network, address: Text): async Errors.Result<Nat, Text> {
-        let network_text = switch (network) {
-            case (#Mainnet) "mainnet";
-            case (#Testnet) "testnet";
-        };
-
-        // Add cycles for the API call
-        ExperimentalCycles.add<system>(10_000_000_000);
-
-        // Make the API call to get the balance
-        let balance_result = await management_canister_actor.bitcoin_get_balance({
-            address = address;
-            network = network_text;
-            min_confirmations = null;
-        });
-
-        // Return the balance or an error
-        switch (balance_result) {
-            case (#ok(balance)) { return #ok(balance) };
-            case (#err(error_message)) { return #err(error_message) };
         }
     };
 };
