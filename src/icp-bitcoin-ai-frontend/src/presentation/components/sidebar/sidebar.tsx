@@ -13,19 +13,19 @@ const Sidebar: React.FC<Props> = ({ actual, onChange }: Props) => {
   const [coins, setCoins] = useState([
     {
       title: 'Bitcoin',
-      icon: 'coins/bitcoin.png'
+      icon: '/coins/bitcoin.png'
     },
     {
       title: 'Etherum',
-      icon: 'coins/eth.png'
+      icon: '/coins/eth.png'
     },
     {
       title: 'Solana',
-      icon: 'coins/solana.png'
+      icon: '/coins/solana.png'
     },
     {
       title: 'ICP',
-      icon: 'coins/icp.png'
+      icon: '/coins/icp.png'
     }
   ])
   const [pages, setPages] = useState([
