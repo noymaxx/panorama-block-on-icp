@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { ReactElement, useRef, useState } from 'react'
 import styles from './hashblocks-styles.module.scss'
 
 type Props = {
@@ -27,37 +27,37 @@ const Hashblocks: React.FC<Props> = ({ coin }: Props) => {
     {
       id: '[124012901249]',
       value: '687,213',
-      date: '06/01, 17:21'
+      date: '2 days ago, 17:21'
     },
     {
       id: '[124012901249]',
       value: '764,576',
-      date: '05/31, 12:46'
+      date: '3 days ago, 12:46'
     },
     {
       id: '[124012901249]',
       value: '845,154',
-      date: '05/30, 16:26'
+      date: '4 days ago, 16:26'
     },
     {
       id: '[124012901249]',
       value: '542,133',
-      date: '05/30, 04:23'
+      date: '4 days ago, 04:23'
     },
     {
       id: '[124012901249]',
       value: '875,361',
-      date: '05/29, 17:41'
+      date: '5 days ago, 17:41'
     },
     {
       id: '[124012901249]',
       value: '237,618',
-      date: '05/29, 16:47'
+      date: '5 days ago, 16:47'
     },
     {
       id: '[124012901249]',
       value: '571,541',
-      date: '05/28, 16:16'
+      date: '6 days ago, 16:16'
     },
 
   ])
@@ -88,6 +88,21 @@ const Hashblocks: React.FC<Props> = ({ coin }: Props) => {
     hashblocksRef.current.scrollLeft = scrollLeft - walk
   }
 
+  const getCoin = (): ReactElement => {
+    switch (coin) {
+      case 'Bitcoin':
+        return <img src="/coins/bitcoin.png" alt="" />
+      case 'Etherum':
+        return <img src="/coins/eth.png" alt="" />
+      case 'Solana':
+        return <img src="/coins/solana.png" alt="" />
+      case 'ICP':
+        return <img src="/coins/icp.png" alt="" />
+      default:
+        return <img src="/coins/icp.png" alt="" />
+    }
+  }
+
   return (
     <div className={styles.container}>
       <h2>HASHBLOCKS</h2>
@@ -110,6 +125,18 @@ const Hashblocks: React.FC<Props> = ({ coin }: Props) => {
                 </div>
                 <div className={styles.graph}>
                   <img src="/graph.png" alt="" />
+                </div>
+              </div>
+
+              <p className={styles.title}>Details</p>
+
+              <div className={styles.details}>
+                <div className={styles.coin}>
+                  {getCoin()}
+                </div>
+                <div className={styles.date}>
+                  <h3>{coin}</h3>
+                  <p>{item.date}</p>
                 </div>
               </div>
             </div>

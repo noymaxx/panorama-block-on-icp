@@ -22,9 +22,10 @@
     position: relative;
 
     .card {
-      height: 160px;
+      min-height: 160px;
       min-width: 260px;
       display: flex;
+      flex-direction: column;
       box-shadow: 0px 4px 4px 0px #00000040;
       background: linear-gradient(94.84deg, rgba(16, 27, 82, 0.9) 10%, rgba(6, 11, 38, 1) 100%);
       padding: 20px;
@@ -32,7 +33,6 @@
       scroll-snap-align: start;
 
       .info {
-        width: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -43,7 +43,9 @@
         border-radius: 14px;
         height: 60px;
 
-        .id {}
+        .id {
+          font-size: 14px;
+        }
 
         .value {
           font-size: 24px;
@@ -75,6 +77,50 @@
           // border-right: 60px solid white;
           p {
             color: white;
+          }
+        }
+      }
+
+      .title {
+        margin-top: 16px;
+        margin-bottom: 6px;
+        color: #A0AEC0;
+        font-size: 14px;
+      }
+
+      .details {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+
+        .coin {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-color: #ffffff0e;
+
+          img {
+            width: 50%;
+          }
+        }
+
+        .date {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          h3 {
+            font-size: 16px;
+          }
+
+          p {
+            font-size: 14px;
+            color: #A0AEC0;
           }
         }
       }
