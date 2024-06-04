@@ -117,33 +117,36 @@ const Hashblocks: React.FC<Props> = ({ coin }: Props) => {
 
         {data && data.map((item: HashblockProps, index: number) => {
           return (
-            <div className={styles.card}>
-              <div className={styles.info}>
-                <p className={styles.id}>id {item.id}</p>
-                <div className={styles.value}>
-                  <p>{item.value}</p>
+            <>
+              {index > 0 && < div className={styles.divider}></div >}
+              <div className={styles.card}>
+                <div className={styles.info}>
+                  <p className={styles.id}>id {item.id}</p>
+                  <div className={styles.value}>
+                    <p>{item.value}</p>
+                  </div>
+                  <div className={styles.graph}>
+                    <img src="/graph.png" alt="" />
+                  </div>
                 </div>
-                <div className={styles.graph}>
-                  <img src="/graph.png" alt="" />
+
+                <p className={styles.title}>Details</p>
+
+                <div className={styles.details}>
+                  <div className={styles.coin}>
+                    {getCoin()}
+                  </div>
+                  <div className={styles.date}>
+                    <h3>{coin}</h3>
+                    <p>{item.date}</p>
+                  </div>
                 </div>
               </div>
-
-              <p className={styles.title}>Details</p>
-
-              <div className={styles.details}>
-                <div className={styles.coin}>
-                  {getCoin()}
-                </div>
-                <div className={styles.date}>
-                  <h3>{coin}</h3>
-                  <p>{item.date}</p>
-                </div>
-              </div>
-            </div>
+            </>
           )
         })}
       </div>
-    </div>
+    </div >
   )
 }
 
