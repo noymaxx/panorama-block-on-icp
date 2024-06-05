@@ -115,6 +115,8 @@ module Types {
     //     block_time: Timestamp;
     // };
 
+    public type Transactions = [Text];
+
     public type ChainStats = {
         funded_txo_count : Nat;
         funded_txo_sum : Nat;
