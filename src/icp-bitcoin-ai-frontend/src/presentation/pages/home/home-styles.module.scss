@@ -4,6 +4,8 @@
   height: 100vh;
 
   .container {
+    display: flex;
+    flex-direction: column;
     width: 85vw;
     background-color: #060722;
     padding: 40px 0;
