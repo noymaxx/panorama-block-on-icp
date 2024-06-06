@@ -1,15 +1,11 @@
 {
   "canisters": {
-    "cryptoQuant": {
-      "main": "src/icp-bitcoin-ai-backend/cryptoQuant.mo",
-      "type": "motoko"
-    },
     "mempool": {
       "main": "src/icp-bitcoin-ai-backend/mempool.mo",
       "type": "motoko"
     },
     "icp-bitcoin-ai-frontend": {
-      "dependencies": ["cryptoQuant", "mempool"],
+      "dependencies": ["mempool"],
       "source": ["src/icp-bitcoin-ai-frontend/dist"],
       "type": "assets",
       "workspace": "icp-bitcoin-ai-frontend"
