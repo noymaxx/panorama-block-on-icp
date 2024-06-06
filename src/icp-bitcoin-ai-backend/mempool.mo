@@ -7,11 +7,13 @@ import Text "mo:base/Text";
 import Array "mo:base/Array";
 import ExperimentalCycles "mo:base/ExperimentalCycles";
 import JSON "mo:serde/JSON";
+import Iter "mo:base/Iter";
 
 // Actor
 actor {
     var ic: Types.IC = actor("aaaaa-aa");
     var host: Text = "api.mempool.space";
+    var current_block_hash: Text = "";
 
     public query func transform(raw: Types.TransformArgs): async Types.CanisterHttpResponsePayload {
         let transformed: Types.CanisterHttpResponsePayload = {
@@ -39,23 +41,19 @@ actor {
         { name = "User-Agent"; value = "mempool_canister" }
     ];
 
-     // Nova função para processar o bloco em tempo real
-    public func process_real_time_block(block_hash: Text) : async Errors.Result<Text, Errors.MempoolError> {
-        let result = await get_bitcoin_block(block_hash);
-        switch (result) {
-            case (#ok(block)) {
-                // Aqui você pode adicionar lógica para processar o bloco
-                Debug.print(debug_show(block));
-                return #ok("Block processed successfully");
-            };
-            case (#err(error)) {
-                return #err(error);
-            };
-        }
+    // Função para definir o hash do bloco
+    public func set_block_hash(block_hash: Text) : async Errors.Result<Text, Errors.MempoolError> {
+        current_block_hash := block_hash;
+        return #ok("Block hash set successfully");
     };
 
-    public func get_bitcoin_block(block_hash: Text): async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
-        let url = "https://" # host # "/api/block/" # block_hash;
+    // Função get_bitcoin_block que usa a variável de estado current_block_hash
+    public func get_bitcoin_block(): async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
+
+        let url = "https://" # host # "/api/block/" # current_block_hash;
 
         let http_request: Types.HttpRequestArgs = {
             url = url;
@@ -93,17 +91,20 @@ actor {
         }
     };
 
-    public func fetch_last_blocks(block_hash : Text, count : Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
-        var current_hash = block_hash;
+    // Função fetch_last_blocks que atualiza current_block_hash
+    public func fetch_last_blocks(count : Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
         var blocks : [Types.BitcoinBlock] = [];
-
         var current_count = count;
+
         while (current_count > 0) {
-            let block_result = await get_bitcoin_block(current_hash);
+            let block_result = await get_bitcoin_block();
             switch (block_result) {
                 case (#ok(block_data)) {
                     blocks := Array.append(blocks, [block_data]);
-                    current_hash := block_data.previousblockhash;
+                    current_block_hash := block_data.previousblockhash; // Atualiza o hash do bloco atual
                 };
                 case (#err(error)) {
                     return #err(error);
@@ -115,8 +116,11 @@ actor {
         return #ok(blocks);
     };
 
-    public func get_bitcoin_block_txids(block_hash : Text) : async Errors.Result<Text, Errors.MempoolError> {
-        let url_txids = "https://api.mempool.space/api/block/" # block_hash # "/txids";
+    public func get_bitcoin_block_txids() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
+        let url_txids = "https://api.mempool.space/api/block/" # current_block_hash # "/txids";
 
         let http_request_txids : Types.HttpRequestArgs = {
             url = url_txids;
@@ -137,9 +141,22 @@ actor {
             case (?y) { y };
         };
 
-        let txids : Text = decoded_text_txids;
+        //Conversao de decoded_text_txids para blob e depoois de blob para [text]
+        let json_result_txids = JSON.fromText(decoded_text_txids, null);
+        let json_blob_txids = switch (json_result_txids) {
+            case (#ok(blob)) { blob };
+            case (#err(e)) {
+                return #err({ message = "Failed to parse JSON: " # e });
+            };
+        };
 
-        return #ok(txids);
+        let txids : ?Types.Transactions = from_candid(json_blob_txids);
+        switch (txids) {
+            case (?t) { return #ok(t) };
+            case (null) {
+                return #err({ message = "Failed to convert JSON to [Text]" });
+            };
+        };
     };
 
     public func get_bitcoin_tx(txid : Text) : async Errors.Result<?Text, Errors.MempoolError> {
@@ -172,6 +189,38 @@ actor {
 
         return #ok(?jsonText);        
     };
+
+    public func fetch_transactions_details(): async Errors.Result<[?Text], Errors.MempoolError> {
+        let txids_result = await get_bitcoin_block_txids();
+
+        switch (txids_result) {
+            case (#ok(txids)) {
+                // Função recursiva para processar cada txid assincronamente
+                func processTxids(txids: [Text], index: Nat, accum: [?Text]): async [?Text] {
+                    if (index == txids.size()) {
+                        return accum;
+                    } else {
+                        let tx_result = await get_bitcoin_tx(txids[index]);
+                        let processed_result: ?Text = switch (tx_result) {
+                            case (#ok(text)) { text };
+                            case (#err(_)) { null };
+                        };
+                        return await processTxids(txids, index + 1, Array.append(accum, [processed_result]));
+                    };
+                };
+                // Inicia o processamento recursivo
+                let transactions_details = await processTxids(txids, 0, []);
+                return #ok(transactions_details);
+            };
+            case (#err(e)) {
+                return #err(e);
+            };
+        };
+    };
+
+
+
+
 
     public func get_address_info(address: Text): async Errors.Result<Types.AddressInfo, Errors.MempoolError> {
         let url = "https://" # host # "/api/address/" # address;
@@ -207,8 +256,8 @@ actor {
         switch (block) {
             case (?b) { return #ok(b) };
             case (null) {
-                return #err({ message = "Failed to convert JSON to BitcoinBlock" });
+                return #err({ message = "Failed to convert JSON to AddressInfo" });
             };
-        }
+        };
     };
 };
