@@ -1,7 +1,6 @@
 import Errors "./Errors";
 
 module Types {
-    // Definição do tipo Timestamp
     public type Timestamp = Nat64;
 
     public type ManagementCanisterActor = actor {
@@ -12,7 +11,6 @@ module Types {
         } -> async Errors.Result<Nat, Text>;
     };
     
-    // Define the Bitcoin network
     public type Network = {
         #Mainnet;
         #Testnet;
