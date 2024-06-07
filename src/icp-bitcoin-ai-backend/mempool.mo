@@ -61,7 +61,7 @@ actor {
             transform = ?transform_context;
         };
 
-        ExperimentalCycles.add<system>(230_949_972_000);
+        ExperimentalCycles.add<system>(1_603_124_000);
 
         let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
 
@@ -113,7 +113,7 @@ actor {
         return #ok(blocks);
     };
 
-    public func get_bitcoin_block_transactions_info() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
+    public func get_bitcoin_block_transactions() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
         if (current_block_hash == "") {
             return #err({ message = "Block hash not set" });
         };
@@ -128,7 +128,7 @@ actor {
             transform = null;
         };
 
-        ExperimentalCycles.add<system>(230_949_972_000);
+        ExperimentalCycles.add<system>(1_603_124_000);
 
         let http_response_txids : Types.HttpResponsePayload = await ic.http_request(http_request_txids);
 
@@ -168,7 +168,7 @@ actor {
             transform = ?transform_context;
         };
 
-        ExperimentalCycles.add<system>(230_949_972_000);
+        ExperimentalCycles.add<system>(1_603_124_000);
 
         let http_response_tx : Types.HttpResponsePayload = await ic.http_request(http_request_tx);
 
@@ -186,7 +186,7 @@ actor {
     };
 
     public func fetch_transactions(): async Errors.Result<[?Text], Errors.MempoolError> {
-        let txids_result = await get_bitcoin_block_transactions_info();
+        let txids_result = await get_bitcoin_block_transactions();
 
         switch (txids_result) {
             case (#ok(txids)) {
@@ -223,7 +223,7 @@ actor {
             transform = ?transform_context;
         };
 
-        ExperimentalCycles.add<system>(230_949_972_000);
+        ExperimentalCycles.add<system>(1_603_124_000);
 
         let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
 
