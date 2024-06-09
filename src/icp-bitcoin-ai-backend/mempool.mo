@@ -61,7 +61,7 @@ actor {
             transform = ?transform_context;
         };
 
-        ExperimentalCycles.add<system>(1_603_124_000);
+        Cycles.add<system>(1_603_124_000);
 
         let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
 
@@ -128,7 +128,7 @@ actor {
             transform = null;
         };
 
-        ExperimentalCycles.add<system>(1_603_124_000);
+        Cycles.add<system>(1_603_124_000);
 
         let http_response_txids : Types.HttpResponsePayload = await ic.http_request(http_request_txids);
 
@@ -168,7 +168,7 @@ actor {
             transform = ?transform_context;
         };
 
-        ExperimentalCycles.add<system>(1_603_124_000);
+        Cycles.add<system>(1_603_124_000);
 
         let http_response_tx : Types.HttpResponsePayload = await ic.http_request(http_request_tx);
 
@@ -223,7 +223,7 @@ actor {
             transform = ?transform_context;
         };
 
-        ExperimentalCycles.add<system>(1_603_124_000);
+        Cycles.add<system>(1_603_124_000);
 
         let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
 
