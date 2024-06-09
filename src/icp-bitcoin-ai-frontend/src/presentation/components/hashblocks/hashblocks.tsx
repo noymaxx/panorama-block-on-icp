@@ -114,12 +114,11 @@ const Hashblocks: React.FC<Props> = ({ coin }: Props) => {
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
       >
-
         {data && data.map((item: HashblockProps, index: number) => {
           return (
             <>
-              {index > 0 && < div className={styles.divider}></div >}
-              <div className={styles.card}>
+              {index > 0 && < div className={styles.divider} key={`divider - ${index}`}></div >}
+              <div className={styles.card} key={`hashblock - ${index}`}>
                 <div className={styles.info}>
                   <p className={styles.id}>id {item.id}</p>
                   <div className={styles.value}>

@@ -64,4 +64,12 @@
   .active {
     background: linear-gradient(111.84deg, rgba(38, 46, 87, 0.932) 65.3%, rgba(64, 84, 182, 0.7) 100%);
   }
+
+  .disabled {
+    &:hover {
+      // background-color: #1A1F37;
+      opacity: 1;
+      cursor: not-allowed
+    }
+  }
 }

@@ -3,6 +3,7 @@ import styles from './home-styles.module.scss'
 import Sidebar from '../../components/sidebar/sidebar'
 import Hashblocks from '../../components/hashblocks/hashblocks'
 import Network, { NetworkData } from '../../components/network/network'
+import CustomTabs from '../../components/custom-tabs/custom-tabs'
 
 const Home: React.FC = () => {
   const [actual, setActual] = useState('Bitcoin')
@@ -21,7 +22,11 @@ const Home: React.FC = () => {
       <Sidebar actual={actual} onChange={(coin) => setActual(coin)} />
       <div className={styles.container}>
         <Hashblocks coin={actual} />
-        <Network data={data} />
+        <div className={styles.info}>
+          <Network data={data} />
+          <CustomTabs
+            labels={['by hashblocks', 'by time']} />
+        </div>
       </div>
     </div>
   )
