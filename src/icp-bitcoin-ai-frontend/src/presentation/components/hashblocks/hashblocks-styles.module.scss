@@ -6,6 +6,7 @@
   max-width: 100%;
 
   h2 {
+    font-size: 18px;
     padding-left: 40px;
   }
 
@@ -149,6 +150,8 @@
 
 @media screen and (max-width: 1200px) {
   .container {
+    gap: 16px;
+
     h2 {
       padding-left: 20px;
     }
@@ -189,7 +192,7 @@
 
       .divider {
         display: flex;
-        min-width: 30px;
+        min-width: 20px;
         height: 4.5px;
         background-color: #56577A;
       }
