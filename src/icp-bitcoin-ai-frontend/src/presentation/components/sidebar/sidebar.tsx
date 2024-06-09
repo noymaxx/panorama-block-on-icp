@@ -17,15 +17,18 @@ const Sidebar: React.FC<Props> = ({ actual, onChange }: Props) => {
     },
     {
       title: 'Etherum',
-      icon: '/coins/eth.png'
+      icon: '/coins/eth.png',
+      disabled: true
     },
-    {
-      title: 'Solana',
-      icon: '/coins/solana.png'
-    },
+    // {
+    //   title: 'Solana',
+    //   icon: '/coins/solana.png',
+    // disabled: true
+    // },
     {
       title: 'ICP',
-      icon: '/coins/icp.png'
+      icon: '/coins/icp.png',
+      disabled: true
     }
   ])
   const [pages, setPages] = useState([

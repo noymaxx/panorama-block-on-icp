@@ -19,7 +19,12 @@ const CustomTabs: React.FC<Props> = ({ labels }: Props) => {
     <div className={styles.tabs}>
       <TabContext value={value}>
         <Box sx={{ display: 'flex', height: '60px', padding: '8px', borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs sx={{ marginBottom: '4px' }} value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tabs
+            sx={{ marginBottom: '4px' }}
+            value={value}
+            onChange={handleChange}
+            aria-label="chart tabs"
+          >
             {labels.map((label: string, index: number) => {
               return <Tab autoCapitalize='false' className={styles.tab} label={label} value={index.toString()} key={`tab - ${index}`} />
             })}
@@ -35,7 +40,7 @@ const CustomTabs: React.FC<Props> = ({ labels }: Props) => {
           })
         }
       </TabContext>
-    </div>
+    </div >
   )
 }
 
