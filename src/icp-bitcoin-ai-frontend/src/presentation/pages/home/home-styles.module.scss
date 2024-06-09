@@ -6,9 +6,15 @@
   .container {
     display: flex;
     flex-direction: column;
-    width: 85vw;
+    flex: 1;
+    overflow: hidden;
     background-color: #060722;
     padding: 40px 0;
     display: flex;
+
+    .info {
+      display: flex;
+      max-height: 60%;
+    }
   }
 }

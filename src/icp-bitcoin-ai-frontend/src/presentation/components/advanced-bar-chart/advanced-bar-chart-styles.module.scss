@@ -1,0 +1,46 @@
+.chart {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 850px;
+  max-height: 100%;
+  margin: 40px;
+
+  padding: 20px;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(94.84deg, rgba(16, 27, 82, 0.9) 10%, rgba(6, 11, 38, 1) 100%);
+
+
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .tooltip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    font-size: 14px;
+    color: #404040;
+    background-color: white;
+    // font-weight: bold;
+  }
+
+  .legend {
+    margin-top: 40px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .chart {
+    // max-width: 240px;
+    margin: 20px;
+
+    * tspan {
+      font-size: 10px;
+    }
+  }
+}

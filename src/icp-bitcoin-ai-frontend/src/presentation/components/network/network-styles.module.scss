@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 30%;
+  height: fit-content;
   max-width: 350px;
-  margin-left: 40px;
-  margin-top: 20px;
+  margin: 40px;
+  margin-right: 0;
   padding: 20px;
   border-radius: 14px;
   color: white;
@@ -40,12 +40,20 @@
 
       .label {
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
       }
 
       .value {
         font-size: 14px;
       }
     }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .network {
+    max-width: 240px;
+    margin: 20px;
+    margin-right: 0;
   }
 }

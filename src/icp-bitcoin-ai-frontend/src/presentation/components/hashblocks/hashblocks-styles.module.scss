@@ -12,11 +12,22 @@
   .hashblocks {
     display: flex;
     align-items: center;
-    // gap: 50px;
     cursor: grab;
     overflow-x: scroll;
-    scrollbar-color: transparent transparent;
+
+    &::-webkit-scrollbar {
+      height: 0px;
+    }
+
     user-select: none;
+
+    ::-webkit-scrollbar {
+      height: 0;
+      /* height of horizontal scrollbar ← You're missing this */
+      width: 4px;
+      /* width of vertical scrollbar */
+      border: 1px solid #d5d5d5;
+    }
 
     padding: 0px 40px;
     position: relative;
@@ -131,6 +142,57 @@
       min-width: 40px;
       height: 4.5px;
       background-color: #56577A;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1200px) {
+  .container {
+    h2 {
+      padding-left: 20px;
+    }
+
+    .hashblocks {
+      padding: 0px 20px;
+      position: relative;
+
+      .card {
+        min-width: 220px;
+
+        .title {
+          font-size: 12px;
+        }
+
+        .details {
+          .coin {
+            width: 36px;
+            height: 36px;
+
+            img {
+              width: 50%;
+            }
+          }
+
+          .date {
+            h3 {
+              font-size: 14px;
+            }
+
+            p {
+              font-size: 12px;
+              color: #A0AEC0;
+            }
+          }
+        }
+      }
+
+      .divider {
+        display: flex;
+        min-width: 30px;
+        height: 4.5px;
+        background-color: #56577A;
+      }
     }
   }
 }
