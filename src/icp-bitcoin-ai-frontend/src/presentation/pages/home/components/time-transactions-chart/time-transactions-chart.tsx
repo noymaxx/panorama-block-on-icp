@@ -10,78 +10,54 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-import styles from './advanced-bar-chart-styles.module.scss'
-
-type TooltipTypes = {
-  active: boolean
-  payload: any
-  label: string
-}
+import styles from './time-transactions-chart-styles.module.scss'
 
 const data = [
   {
-    name: '1 ~ 10',
-    transactions: 28169,
+    name: '9 April',
+    transactions: 7630,
     pv: 800,
     amt: 1400,
   },
   {
-    name: '11 ~ 20',
-    transactions: 25132,
+    name: '8 April',
+    transactions: 5780,
     pv: 967,
     amt: 1506,
   },
   {
-    name: '21 ~ 30',
-    transactions: 5161,
+    name: '7 April',
+    transactions: 4300,
     pv: 1098,
     amt: 989,
   },
   {
-    name: '31 ~ 40',
-    transactions: 8951,
+    name: '6 April',
+    transactions: 3951,
     pv: 1200,
     amt: 1228,
   },
   {
-    name: '41 ~ 50',
-    transactions: 12351,
+    name: '5 April',
+    transactions: 4351,
     pv: 1108,
     amt: 1100,
   },
   {
-    name: '51 ~ 60',
-    transactions: 23516,
+    name: '4 April',
+    transactions: 1351,
     pv: 680,
     amt: 1700,
   },
   {
-    name: '61 ~ 70',
-    transactions: 15123,
+    name: '3 April',
+    transactions: 5473,
     pv: 680,
     amt: 1700,
-  },
-  {
-    name: '71 ~ 80',
-    transactions: 12311,
-    pv: 680,
-    amt: 1700,
-  },
-  {
-    name: '81 ~ 90',
-    transactions: 8513,
-    pv: 680,
-    amt: 1700,
-  },
-  {
-    name: '91 ~ 100',
-    transactions: 6123,
-    pv: 680,
-    amt: 1700,
-  },
+  }
 ]
 
-const AdvancedBarChart: React.FC = () => {
+const TimeTransactionsChart: React.FC = () => {
   const [opacity, setOpacity] = useState({
     "total": 1,
     // "transactions": 1,
@@ -153,7 +129,7 @@ const AdvancedBarChart: React.FC = () => {
 
   return (
     <div className={styles.chart}>
-      <h2 className={styles.title}>Last 100 Hashblocks</h2>
+      <h2 className={styles.title}>Last 7 days</h2>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={data}
@@ -178,4 +154,4 @@ const AdvancedBarChart: React.FC = () => {
   )
 }
 
-export default AdvancedBarChart
+export default TimeTransactionsChart

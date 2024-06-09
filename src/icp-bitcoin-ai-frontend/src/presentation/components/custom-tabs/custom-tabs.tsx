@@ -1,8 +1,9 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import styles from './custom-tabs-styles.module.scss'
 import { Box, Tab, Tabs } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import AdvancedBarChart from '../advanced-bar-chart/advanced-bar-chart'
+import HashblockTransactionsChart from '../../pages/home/components/hashblock-transactions-chart/hashblock-transactions-chart'
+import TimeTransactionsChart from '../../pages/home/components/time-transactions-chart/time-transactions-chart'
 
 type Props = {
   labels: string[]
@@ -31,14 +32,19 @@ const CustomTabs: React.FC<Props> = ({ labels }: Props) => {
           </Tabs>
         </Box>
 
-
-        {
+        <TabPanel className={styles.panel} sx={{ display: value === '0' ? 'flex' : 'none', width: '100%', height: '100%' }} value='0' key={`panel - 0`}>
+          <HashblockTransactionsChart />
+        </TabPanel>
+        <TabPanel className={styles.panel} sx={{ display: value === '1' ? 'flex' : 'none', width: '100%', height: '100%' }} value='1' key={`panel - 1`}>
+          <TimeTransactionsChart />
+        </TabPanel>
+        {/* {
           labels.map((panel: any, index: number) => {
             return <TabPanel className={styles.panel} sx={{ display: index.toString() === value ? 'flex' : 'none', width: '100%', height: '100%' }} value={index.toString()} key={`panel - ${index}`}>
-              {panel && <AdvancedBarChart />}
+              {panel && <HashblockTransactionsChart />}
             </TabPanel>
           })
-        }
+        } */}
       </TabContext>
     </div >
   )
