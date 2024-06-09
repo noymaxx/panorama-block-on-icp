@@ -168,7 +168,7 @@ const HashblockTransactionsChart: React.FC<Props> = ({ data }: Props) => {
 
       if ((index + 1) % 10 === 0) {
         newData.push({
-          "tx_count": count,
+          transactions: count,
           name: `${index - 8} ~ ${index + 1}`
         })
         count = 0
@@ -209,8 +209,8 @@ const HashblockTransactionsChart: React.FC<Props> = ({ data }: Props) => {
                 <YAxis stroke="#A0AEC0" fontSize={14} />
                 <Legend margin={{ bottom: 60 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="tx_count" barSize={30} fill="#4022BE" />
-                <Line fontSize={14} type="monotone" dataKey="tx_count" stroke="#ff7300"
+                <Bar dataKey="transactions" barSize={30} fill="#4022BE" />
+                <Line fontSize={14} type="monotone" dataKey="transactions" stroke="#ff7300"
                   strokeOpacity={opacity.total} activeDot={{ r: 8 }} />
               </ComposedChart>
             </ResponsiveContainer>
