@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   ComposedChart,
   Line,
@@ -11,11 +11,16 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import styles from './hashblock-transactions-chart-styles.module.scss'
+import { Skeleton } from '@mui/material'
 
 type TooltipTypes = {
   active: boolean
   payload: any
   label: string
+}
+
+type Props = {
+  data: any
 }
 
 const data = [
@@ -81,15 +86,17 @@ const data = [
   },
 ]
 
-const HashblockTransactionsChart: React.FC = () => {
+const HashblockTransactionsChart: React.FC<Props> = ({ data }: Props) => {
   const [opacity, setOpacity] = useState({
     "total": 1,
     // "transactions": 1,
   })
+  const [chartData, setChartData] = useState()
 
   const handleMouseEnter = (o: any) => {
     const { dataKey } = o
     console.log(opacity)
+    console.log(data)
 
     setOpacity((op) => ({ ...op, [dataKey]: 0.1 }))
   }
@@ -151,30 +158,67 @@ const HashblockTransactionsChart: React.FC = () => {
     return null
   }
 
+  const generateData = () => {
+    const fakeData = Array(100).fill(data[0])
+    const newData: any = []
+    let count = 0
+
+    data.map((item: any, index: number) => {
+      count += Number(item["tx_count"])
+
+      if ((index + 1) % 10 === 0) {
+        newData.push({
+          transactions: count,
+          name: `${index - 8} ~ ${index + 1}`
+        })
+        count = 0
+      }
+    })
+    // fakeData.map((item: any, index: number) => {
+    //   count += Number(item["tx_count"])
+
+    //   if ((index + 1) % 10 === 0) {
+    //     newData.push({
+    //       "tx_count": count,
+    //       name: `${index - 8} ~ ${index + 1}`
+    //     })
+    //     count = 0
+    //   }
+    // })
+    return newData
+  }
+
   return (
-    <div className={styles.chart}>
-      <h2 className={styles.title}>Last 100 Hashblocks</h2>
-      <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart
-          data={data}
-          margin={{
-            top: 8,
-            right: 20,
-            left: 0,
-            bottom: 8,
-          }}
-        >
-          <CartesianGrid stroke="#56577A" strokeDasharray="0 0" />
-          <XAxis dataKey="name" stroke="#A0AEC0" fontSize={14} />
-          <YAxis stroke="#A0AEC0" fontSize={14} />
-          <Legend margin={{ bottom: 60 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
-          <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="transactions" barSize={30} fill="#4022BE" />
-          <Line fontSize={14} type="monotone" dataKey="transactions" stroke="#ff7300"
-            strokeOpacity={opacity.total} activeDot={{ r: 8 }} />
-        </ComposedChart>
-      </ResponsiveContainer>
-    </div>
+    <>
+      {
+        data ? (
+          <div className={styles.chart}>
+            <h2 className={styles.title}>Last 50 Hashblocks</h2>
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={generateData()}
+                margin={{
+                  top: 8,
+                  right: 20,
+                  left: 0,
+                  bottom: 8,
+                }}
+              >
+                <CartesianGrid stroke="#56577A" strokeDasharray="0 0" />
+                <XAxis dataKey="name" stroke="#A0AEC0" fontSize={14} />
+                <YAxis stroke="#A0AEC0" fontSize={14} />
+                <Legend margin={{ bottom: 60 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="transactions" barSize={30} fill="#4022BE" />
+                <Line fontSize={14} type="monotone" dataKey="transactions" stroke="#ff7300"
+                  strokeOpacity={opacity.total} activeDot={{ r: 8 }} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        )
+          : <Skeleton className={styles.chart} variant="rounded" width="100%" height="100%" />
+      }
+    </>
   )
 }
 

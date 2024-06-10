@@ -57,6 +57,10 @@
 
         .id {
           font-size: 14px;
+          max-width: 15ch;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .value {
@@ -84,6 +88,18 @@
             margin-top: 120px;
             margin-right: 16px;
             width: 60px;
+          }
+
+          .size {
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            font-size: 10px;
+            left: 0;
+            position: absolute;
+            margin-top: 120px;
+            width: 100px;
           }
 
           // border-right: 60px solid white;

@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  // height: fit-content;
-  max-width: 340px;
+  min-height: fit-content;
+  max-width: 360px;
   margin: 40px;
   margin-right: 0;
   padding: 20px;
@@ -46,6 +46,24 @@
 
       .value {
         font-size: 14px;
+      }
+
+      .textField {
+        max-width: 160px;
+        height: 40px;
+        background: #0F123B;
+        border-radius: 10px;
+        font-size: 14px;
+        border: solid 1px #56577A;
+
+        * {
+          color: #A0AEC0;
+        }
+      }
+
+      .button {
+        height: 40px;
+        color: white;
       }
     }
   }

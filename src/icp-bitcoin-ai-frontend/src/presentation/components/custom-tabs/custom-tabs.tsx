@@ -7,9 +7,10 @@ import TimeTransactionsChart from '../../pages/home/components/time-transactions
 
 type Props = {
   labels: string[]
+  hashblocks: any
 }
 
-const CustomTabs: React.FC<Props> = ({ labels }: Props) => {
+const CustomTabs: React.FC<Props> = ({ labels, hashblocks }: Props) => {
   const [value, setValue] = React.useState('0')
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -33,10 +34,10 @@ const CustomTabs: React.FC<Props> = ({ labels }: Props) => {
         </Box>
 
         <TabPanel className={styles.panel} sx={{ display: value === '0' ? 'flex' : 'none', width: '100%', height: '100%' }} value='0' key={`panel - 0`}>
-          <HashblockTransactionsChart />
+          <HashblockTransactionsChart data={hashblocks} />
         </TabPanel>
         <TabPanel className={styles.panel} sx={{ display: value === '1' ? 'flex' : 'none', width: '100%', height: '100%' }} value='1' key={`panel - 1`}>
-          <TimeTransactionsChart />
+          <TimeTransactionsChart data={hashblocks} />
         </TabPanel>
         {/* {
           labels.map((panel: any, index: number) => {
