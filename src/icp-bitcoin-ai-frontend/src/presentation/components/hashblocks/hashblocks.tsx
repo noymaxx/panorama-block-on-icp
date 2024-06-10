@@ -112,7 +112,11 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
   const getDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000)
 
-    return `${date.getMonth()}/${date.getDay()}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    return `${minDigit(date.getMonth())}/${minDigit(date.getDay())}/${date.getFullYear()} - ${minDigit(date.getHours())}:${minDigit(date.getMinutes())}:${minDigit(date.getSeconds())}`
+  }
+
+  const minDigit = (value: number) => {
+    return ('0' + value).slice(-2)
   }
 
   return (
@@ -138,7 +142,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                     </Tooltip>
                     <div className={styles.value}>
                       <Tooltip title="Transactions" placement="right-start">
-                        <p>{item.tx_count && item.tx_count}</p>
+                        <p>{item.tx_count}</p>
                       </Tooltip>
                     </div>
                     <div className={styles.graph}>

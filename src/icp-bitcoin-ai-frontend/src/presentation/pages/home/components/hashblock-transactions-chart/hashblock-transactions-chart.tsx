@@ -193,7 +193,7 @@ const HashblockTransactionsChart: React.FC<Props> = ({ data }: Props) => {
       {
         data ? (
           <div className={styles.chart}>
-            <h2 className={styles.title}>Last 100 Hashblocks</h2>
+            <h2 className={styles.title}>Last 50 Hashblocks</h2>
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart
                 data={generateData()}
