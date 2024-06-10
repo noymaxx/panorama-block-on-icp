@@ -1,8 +1,6 @@
 module Types {
-    // Definição do tipo Timestamp
     public type Timestamp = Nat64;
 
-    // Definições de tipos relacionados à requisição HTTPS
     public type HttpRequestArgs = {
         url : Text;
         max_response_bytes : ?Nat64;
@@ -114,6 +112,8 @@ module Types {
     //     block_hash: Text;
     //     block_time: Timestamp;
     // };
+
+    public type Transactions = [Text];
 
     public type ChainStats = {
         funded_txo_count : Nat;
