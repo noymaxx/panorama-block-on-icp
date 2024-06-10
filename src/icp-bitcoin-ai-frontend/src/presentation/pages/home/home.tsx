@@ -6,6 +6,7 @@ import Network, { NetworkData } from '../../components/network/network'
 import CustomTabs from '../../components/custom-tabs/custom-tabs'
 import IcpService from '../../../data/services/icp-service'
 import { jsonParseBigint } from '../../../utils/json-parse-bigint'
+import Header from '../../components/header/header'
 
 const Home: React.FC = () => {
   const [actual, setActual] = useState('Bitcoin')
@@ -53,6 +54,7 @@ const Home: React.FC = () => {
     <div className={styles.home}>
       <Sidebar actual={actual} onChange={(coin) => setActual(coin)} />
       <div className={styles.container}>
+        <Header onSubmit={() => { }} />
         <Hashblocks coin={actual} data={hashblocks} />
         <div className={styles.info}>
           <Network data={data} />
