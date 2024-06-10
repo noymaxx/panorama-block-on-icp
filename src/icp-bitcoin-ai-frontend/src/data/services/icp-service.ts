@@ -26,6 +26,24 @@ const IcpService = {
     catch (error) {
       return error
     }
+  },
+  getAddressInfo: async (address: string) => {
+    try {
+      const response = await actor.get_address_info(address)
+      return response
+    }
+    catch (error) {
+      return error
+    }
+  },
+  getTransactionInfo: async (transaction: string) => {
+    try {
+      const response = await actor.get_bitcoin_transaction_info(transaction)
+      return response
+    }
+    catch (error) {
+      return error
+    }
   }
 }
 

@@ -10,6 +10,8 @@ type Props = {
 type HashblockProps = {
   id: string
   size: string
+  height: string
+  weight: string
   tx_count: string
   timestamp: string
 }
@@ -90,10 +92,6 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
     hashblocksRef.current.scrollLeft = scrollLeft - walk
   }
 
-  useEffect(() => {
-    console.log(data)
-  }, [])
-
   const getCoin = (): ReactElement => {
     switch (coin) {
       case 'Bitcoin':
@@ -138,15 +136,23 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                 <div className={styles.card} key={`hashblock - ${index}`}>
                   <div className={styles.info}>
                     <Tooltip title={item.id} placement="right-start">
-                      <p className={styles.id}>id {item.id}</p>
+                      <p className={styles.id}>{item.id}</p>
                     </Tooltip>
                     <div className={styles.value}>
                       <Tooltip title="Transactions" placement="right-start">
-                        <p>{item.tx_count}</p>
+                        <p>{item.tx_count} txs</p>
                       </Tooltip>
                     </div>
                     <div className={styles.graph}>
-                      <img src="/graph.png" alt="" />
+                      {/* <img src="/graph.png" alt="" /> */}
+                      <div className={styles.size}>
+                        <Tooltip title='Size' placement="right-start">
+                          <p>S: {item.size}</p>
+                        </Tooltip>
+                        <Tooltip title='Weight' placement="right-start">
+                          <p>W: {(Number(item.height) / 100000).toFixed(2)} MB</p>
+                        </Tooltip>
+                      </div>
                     </div>
                   </div>
 

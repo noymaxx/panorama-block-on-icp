@@ -3,7 +3,7 @@ import styles from './header-styles.module.scss'
 import { Button, TextField } from '@mui/material'
 
 type Props = {
-  onSubmit: () => void
+  onSubmit: (type: string, value: string) => void
 }
 
 const Header: React.FC<Props> = ({ onSubmit }: Props) => {
@@ -13,8 +13,9 @@ const Header: React.FC<Props> = ({ onSubmit }: Props) => {
     transaction: '',
     transactionError: ''
   })
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>, type: 'address' | 'transaction') => {
     e.preventDefault()
+    onSubmit(type, values[type])
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +30,7 @@ const Header: React.FC<Props> = ({ onSubmit }: Props) => {
 
   return (
     <div className={styles.header}>
-      <form onSubmit={handleSubmit}>
+      <form id='form-address' onSubmit={(e) => handleSubmit(e, 'address')}>
         <TextField
           required
           className={styles.textField}
@@ -42,7 +43,7 @@ const Header: React.FC<Props> = ({ onSubmit }: Props) => {
         <Button className={styles.button} type='submit'>Get address info</Button>
       </form>
 
-      <form onSubmit={handleSubmit}>
+      <form id='form-transaction' onSubmit={(e) => handleSubmit(e, 'transaction')}>
         <TextField
           required
           className={styles.textField}
