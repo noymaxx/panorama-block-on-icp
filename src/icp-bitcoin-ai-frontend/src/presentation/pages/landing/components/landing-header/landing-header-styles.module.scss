@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 40px);
+  max-width: 1280px;
+  height: 60px;
+  padding: 40px 0;
+  margin: 0 40px;
+
+  .logo {
+    margin-top: 6px;
+    width: 240px;
+  }
+
+  .navigation {
+    display: flex;
+    gap: 30px;
+
+    font-size: 20px;
+    color: #c4c4c4;
+    cursor: pointer;
+
+    a {
+      text-decoration: none;
+      color: #c4c4c4;
+      font-weight: bold;
+    }
+
+    .active {
+      color: white;
+    }
+  }
+
+  .connect {
+    display: flex;
+    justify-content: flex-end;
+    width: 240px;
+  }
+}

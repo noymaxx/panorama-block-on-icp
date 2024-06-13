@@ -16,7 +16,7 @@ type Props = {
 const Network: React.FC<Props> = ({ data }: Props) => {
   return (
     <div className={styles.network}>
-      <h2 className={styles.title}>Network Informations</h2>
+      <h2 className={styles.title}>Network Information</h2>
       <p className={styles.description}>
         {data.description}
       </p>

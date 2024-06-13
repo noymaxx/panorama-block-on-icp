@@ -20,11 +20,11 @@ const Sidebar: React.FC<Props> = ({ actual, onChange }: Props) => {
       icon: '/coins/eth.png',
       disabled: true
     },
-    // {
-    //   title: 'Solana',
-    //   icon: '/coins/solana.png',
-    // disabled: true
-    // },
+    {
+      title: 'Solana',
+      icon: '/coins/solana.png',
+      disabled: true
+    },
     {
       title: 'ICP',
       icon: '/coins/icp.png',
@@ -32,6 +32,11 @@ const Sidebar: React.FC<Props> = ({ actual, onChange }: Props) => {
     }
   ])
   const [pages, setPages] = useState([
+    {
+      title: 'Rank Select',
+      icon: 'account/trend.png',
+      url: '/home'
+    },
     {
       title: 'Profile',
       icon: 'account/profile.png',
