@@ -19,8 +19,11 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1440px) {
   .home {
+    min-height: 100vh;
+    height: auto;
+
     .container {
       padding-bottom: 20px;
     }

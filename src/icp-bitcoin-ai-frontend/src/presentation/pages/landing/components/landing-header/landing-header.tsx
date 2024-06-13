@@ -15,7 +15,7 @@ const navItems: Item[] = [
   },
   {
     title: "About",
-    url: "/#about"
+    url: "#about"
   }
 ]
 
@@ -30,9 +30,9 @@ const LandingHeader: React.FC = () => {
       <nav className={styles.navigation}>
         {navItems.map((item: Item, index: number) => {
           return (
-            <a href={item.url} className={`${styles.navItem} ${active === index && styles.active}`}>
+            <div className={`${styles.navItem} ${active === index && styles.active}`} onClick={() => { index === 1 && window.scrollTo({ top: 600, behavior: "smooth" }) }}>
               {item.title}
-            </a>
+            </div>
           )
         })}
       </nav>
