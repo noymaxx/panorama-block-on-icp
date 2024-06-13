@@ -2,7 +2,7 @@
   display: flex;
 
   .button {
-    padding: 20px;
+    padding: 12px 20px;
 
     &:hover {
       cursor: pointer;
@@ -11,10 +11,10 @@
   }
 
   .wallet {
-    min-width: 240px;
+    min-width: fit-content;
     color: white;
     background-color: #582CFF;
     border-radius: 12px;
+    border: solid 1px black;
   }
 }
-
