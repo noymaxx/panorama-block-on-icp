@@ -15,7 +15,7 @@ const TransactionInfo: React.FC<Props> = ({ title, data }: Props) => {
 
       <p><b>Transaction id:</b> {data.txid}</p>
       <p><b>Size:</b> {data.size}</p>
-      <p><b>Weight:</b>  {(data.weight / 1000).toFixed(2)} KB</p>
+      <p><b>Value:</b>  {(data.weight / 100000).toFixed(2)} BTC</p>
       <p><b>Fee:</b>  {data.fee}</p>
     </div>
   )

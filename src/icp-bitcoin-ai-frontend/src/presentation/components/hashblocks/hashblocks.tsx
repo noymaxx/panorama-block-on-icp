@@ -132,7 +132,12 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
           data ? data.map((item: HashblockProps, index: number) => {
             return (
               <>
-                {index > 0 && < div className={styles.divider} key={`divider - ${index}`}></div >}
+                {index > 0 && (
+                  <div
+                    className={styles.divider}
+                    key={`divider - ${index}`}
+                  ></div>
+                )}
                 <div className={styles.card} key={`hashblock - ${index}`}>
                   <div className={styles.info}>
                     <Tooltip title={item.id} placement="right-start">
@@ -146,11 +151,11 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                     <div className={styles.graph}>
                       {/* <img src="/graph.png" alt="" /> */}
                       <div className={styles.size}>
-                        <Tooltip title='Size' placement="right-start">
-                          <p>S: {item.size}</p>
+                        <Tooltip title="Size" placement="right-start">
+                          <p>S: {(Number(item.size) / 10000).toFixed(0)} KB</p>
                         </Tooltip>
-                        <Tooltip title='Weight' placement="right-start">
-                          <p>W: {(Number(item.height) / 100000).toFixed(2)} MB</p>
+                        <Tooltip title="Weight" placement="right-start">
+                          <p>W: {(Number(item.height) / 1000).toFixed(0)} WU</p>
                         </Tooltip>
                       </div>
                     </div>
@@ -159,9 +164,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                   <p className={styles.title}>Details</p>
 
                   <div className={styles.details}>
-                    <div className={styles.coin}>
-                      {getCoin()}
-                    </div>
+                    <div className={styles.coin}>{getCoin()}</div>
                     <div className={styles.date}>
                       <h3>{coin}</h3>
                       <p>{getDate(Number(item.timestamp))}</p>
@@ -169,7 +172,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                   </div>
                 </div>
               </>
-            )
+            );
           })
             : Array(100).fill(0).map((item, index) => {
               return <>
