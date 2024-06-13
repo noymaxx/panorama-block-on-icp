@@ -75,12 +75,12 @@ const Landing: React.FC = () => {
         <LandingFooter />
 
         {
-          scrollPosition >= 100 && <a href='/#home' className={styles.goToTop}>
+          scrollPosition >= 100 && <div className={styles.goToTop} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             <KeyboardArrowUpIcon />
-          </a>
+          </div>
         }
       </div>
-    </div>
+    </div >
   )
 }
 

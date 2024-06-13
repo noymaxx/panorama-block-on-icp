@@ -27,3 +27,14 @@
     }
   }
 }
+
+
+@media screen and (max-width: 1440px) {
+  .sidebar {
+    height: auto;
+
+    .container {
+      padding-bottom: 20px;
+    }
+  }
+}
