@@ -1,13 +1,12 @@
 import { createActor } from "../../../../declarations/mempool"
 
-
 const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID);
 
 const IcpService = {
   setblock: async () => {
     try {
       const response = await actor.set_block_hash(
-        "000000000000000000024c7cd38045d8e7fe447e12a3a916161e603dcdd35414"
+        "00000000000000000001a35d250704c73a121cd8a6aee6bcaae53dd4b7c0e045"
       );
       return response
     } catch (error) {
