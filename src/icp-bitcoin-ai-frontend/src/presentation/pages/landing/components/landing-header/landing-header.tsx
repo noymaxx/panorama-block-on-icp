@@ -4,7 +4,6 @@ import Button from "../../../../components/button/button";
 import { useNavigate } from "react-router-dom";
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent"
-// import { HttpAgent } from "@dfinity/agent";
 import { createActor } from "../../../../../../../declarations/mempool";
 
 // const host = "http://localhost:4943/";
@@ -31,16 +30,12 @@ const LandingHeader: React.FC = () => {
     await authClient.login({
       identityProvider: import.meta.env.II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
       onSuccess: async () => {
-        console.log("menos mal");
         const identity = authClient.getIdentity();
-        console.log("oie: ", identity)
         const agent = new HttpAgent({ identity });
         console.log("o tal do polling: ", agent)
         const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID, {
           agent,
         });
-        // Aqui você pode armazenar o ator no estado global ou contexto, se precisar usar em outras partes do app
-        console.log("Logged in with Identity:", identity);
         navigate("/home");
       },
     });
