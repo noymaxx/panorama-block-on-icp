@@ -39,7 +39,7 @@ const Home: React.FC = () => {
 
         const info = await IcpService.getBlockInfo()
 
-        const response: any = await IcpService.getHashblocks(BigInt(50))
+        const response: any = await IcpService.getHashblocks(BigInt(10))
 
         if (response.ok) {
           const json = jsonParseBigint(response.ok)
