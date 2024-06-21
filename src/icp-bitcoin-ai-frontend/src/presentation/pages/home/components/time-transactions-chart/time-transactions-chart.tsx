@@ -67,6 +67,7 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
     "total": 1,
     // "transactions": 1,
   })
+  const [days, setDays] = useState(0)
 
   const handleMouseEnter = (o: any) => {
     const { dataKey } = o
@@ -117,7 +118,7 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
 
   const generateData = () => {
     const max = timeDifference(data[0].timestamp, data[data.length - 1].timestamp)
-    const newData: any = Array.from({ length: max }, () => new Object({ 'transactions': 0, name: 'Last day' }))
+    const newData: any = Array.from({ length: max }, () => new Object({ 'transactions': 0, name: '' }))
     console.log(newData)
     let lastDiff = 0
 
@@ -140,24 +141,21 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
   }
 
   useEffect(() => {
-    console.log(generateData())
-    // console.log(data[0].timestamp - data[-1].timestamp)
-    // console.log(Number(data[0].timestap) - Number(data[data.length - 1].timestamp))
-    timeDifference(data[0].timestamp, data[data.length - 1].timestamp)
+    setDays(timeDifference(data[0].timestamp, data[data.length - 1].timestamp))
   }, [])
 
   return (
     <>
       {
         data ? <div className={styles.chart}>
-          <h2 className={styles.title}>Last 7 days</h2>
+          <h2 className={styles.title}>Last {days} days</h2>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={generateData()}
               margin={{
                 top: 8,
                 right: 20,
-                left: 0,
+                left: 8,
                 bottom: 8,
               }}
             >

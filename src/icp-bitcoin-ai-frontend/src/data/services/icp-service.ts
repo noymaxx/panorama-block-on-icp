@@ -7,7 +7,7 @@ const IcpService = {
   setblock: async () => {
     try {
       const response = await actor.set_block_hash(
-        "000000000000000000012f4b8628dddc2d10c5a825aead23cf2c3a5a430a8ab3"
+        "000000000000000000031b5866b8a3702b70c44b751be809462a6adc5d490fc7"
       );
       return response
     } catch (error) {

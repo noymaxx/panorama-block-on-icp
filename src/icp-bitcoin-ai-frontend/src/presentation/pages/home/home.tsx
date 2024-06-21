@@ -41,7 +41,7 @@ const Home: React.FC = () => {
 
         const info = await IcpService.getBlockInfo()
 
-        const response: any = await IcpService.getHashblocks(BigInt(50))
+        const response: any = await IcpService.getHashblocksCached(BigInt(50))
 
         if (response.ok) {
           const json = jsonParseBigint(response.ok)
@@ -49,6 +49,8 @@ const Home: React.FC = () => {
           setHashblocks(json)
           localStorage.setItem('hashblocks', JSON.stringify(json))
         }
+        // const json = jsonParseBigint()
+        // console.log(json)
       }
     }
 
