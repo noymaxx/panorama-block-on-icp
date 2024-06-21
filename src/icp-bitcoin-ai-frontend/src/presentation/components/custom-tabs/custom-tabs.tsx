@@ -34,10 +34,10 @@ const CustomTabs: React.FC<Props> = ({ labels, hashblocks }: Props) => {
         </Box>
 
         <TabPanel className={styles.panel} sx={{ display: value === '0' ? 'flex' : 'none', width: '100%', height: '100%' }} value='0' key={`panel - 0`}>
-          <HashblockTransactionsChart data={hashblocks} />
+          <HashblockTransactionsChart data={hashblocks && hashblocks.slice(0, 100)} />
         </TabPanel>
         <TabPanel className={styles.panel} sx={{ display: value === '1' ? 'flex' : 'none', width: '100%', height: '100%' }} value='1' key={`panel - 1`}>
-          <TimeTransactionsChart data={hashblocks} />
+          <TimeTransactionsChart data={hashblocks && hashblocks} />
         </TabPanel>
         {/* {
           labels.map((panel: any, index: number) => {
