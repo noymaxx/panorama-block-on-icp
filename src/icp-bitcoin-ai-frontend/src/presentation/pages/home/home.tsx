@@ -31,6 +31,8 @@ const Home: React.FC = () => {
       const cache = localStorage.getItem('hashblocks')
       if (cache) {
         console.log('cache')
+        console.log(JSON.parse(cache))
+
         setHashblocks(JSON.parse(cache))
         // localStorage.clear()
       }
@@ -39,13 +41,16 @@ const Home: React.FC = () => {
 
         const info = await IcpService.getBlockInfo()
 
-        const response: any = await IcpService.getHashblocks(BigInt(10))
+        const response: any = await IcpService.getHashblocksCached(BigInt(50))
 
         if (response.ok) {
           const json = jsonParseBigint(response.ok)
+          console.log(json)
           setHashblocks(json)
           localStorage.setItem('hashblocks', JSON.stringify(json))
         }
+        // const json = jsonParseBigint()
+        // console.log(json)
       }
     }
 

@@ -5,8 +5,13 @@
       "type": "motoko"
     },
     "icp-bitcoin-ai-frontend": {
-      "dependencies": ["mempool", "internet_identity"],
-      "source": ["src/icp-bitcoin-ai-frontend/dist"],
+      "dependencies": [
+        "mempool",
+        "internet_identity"
+      ],
+      "source": [
+        "src/icp-bitcoin-ai-frontend/dist"
+      ],
       "type": "assets",
       "workspace": "icp-bitcoin-ai-frontend"
     },
@@ -31,4 +36,3 @@
   "output_env_file": ".env",
   "version": 1
 }
-

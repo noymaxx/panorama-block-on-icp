@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   ComposedChart,
   Line,
@@ -67,6 +67,7 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
     "total": 1,
     // "transactions": 1,
   })
+  const [days, setDays] = useState(0)
 
   const handleMouseEnter = (o: any) => {
     const { dataKey } = o
@@ -82,37 +83,12 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
   }
 
   const getIntroOfPage = (label: string) => {
-    if (label === '1 ~ 10') {
-      return "about the last 1 to 10 hashblocks"
+    if (label === 'Last day') {
+      return "about the accumulation of last day's transactions"
     }
-    else if (label === '11 ~ 20') {
-      return "about the last 11 to 20 hashblocks"
+    else {
+      return `about the accumulation of transactions from ${label}`
     }
-    else if (label === '21 ~ 30') {
-      return "about the last 21 to 30 hashblocks"
-    }
-    else if (label === '31 ~ 40') {
-      return "about the last 31 to 40 hashblocks"
-    }
-    else if (label === '41 ~ 50') {
-      return "about the last 41 to 50 hashblocks"
-    }
-    else if (label === '51 ~ 60') {
-      return "about the last 51 to 60 hashblocks"
-    }
-    else if (label === '61 ~ 70') {
-      return "about the last 61 to 70 hashblocks"
-    }
-    else if (label === '71 ~ 80') {
-      return "about the last 71 to 80 hashblocks"
-    }
-    else if (label === '81 ~ 90') {
-      return "about the last 81 to 90 hashblocks"
-    }
-    else if (label === '91 ~ 100') {
-      return "about the last 91 to 100 hashblocks"
-    }
-    return ''
   }
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -130,18 +106,56 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
     return null
   }
 
+  const timeDifference = (date1: any, date2: any) => {
+    date1 = new Date(date1 * 1000)
+    date2 = new Date(date2 * 1000)
+    const difference = date1 - date2;
+
+    const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+    console.log(daysDifference)
+    return daysDifference
+  }
+
+  const generateData = () => {
+    const max = timeDifference(data[0].timestamp, data[data.length - 1].timestamp)
+    const newData: any = Array.from({ length: max }, () => new Object({ 'transactions': 0, name: '' }))
+    console.log(newData)
+    let lastDiff = 0
+
+    data.map((item: any) => {
+      let diff = timeDifference(data[0].timestamp, item.timestamp)
+
+      if (diff === lastDiff && diff < max) {
+        newData[diff]['transactions'] += Number(item["tx_count"])
+        if (!newData[diff].name) {
+          newData[diff].name = diff === 0 ? 'Last day' : `${diff} ${diff === 1 ? 'day' : 'days'}  before`
+        }
+        console.log(newData)
+      }
+      else {
+        lastDiff = diff
+      }
+    })
+
+    return newData
+  }
+
+  useEffect(() => {
+    setDays(timeDifference(data[0].timestamp, data[data.length - 1].timestamp))
+  }, [])
+
   return (
     <>
       {
         data ? <div className={styles.chart}>
-          <h2 className={styles.title}>Last 7 days</h2>
+          <h2 className={styles.title}>Last {days} days</h2>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
-              data={data}
+              data={generateData()}
               margin={{
                 top: 8,
                 right: 20,
-                left: 0,
+                left: 8,
                 bottom: 8,
               }}
             >

@@ -129,7 +129,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
         onMouseMove={handleMouseMove}
       >
         {
-          data ? data.map((item: HashblockProps, index: number) => {
+          data ? data.slice(0, 50).map((item: HashblockProps, index: number) => {
             return (
               <>
                 {index > 0 && (
