@@ -13,6 +13,8 @@ actor {
     var ic: Types.IC = actor("aaaaa-aa");
     var host: Text = "api.mempool.space";
     var current_block_hash: Text = "";
+    
+    stable var stableBlocks: [Types.BitcoinBlock] = [];
 
     public query func transform(raw: Types.TransformArgs): async Types.CanisterHttpResponsePayload {
         let transformed: Types.CanisterHttpResponsePayload = {
@@ -88,20 +90,21 @@ actor {
         }
     };
 
-
-    public func fetch_bitcoin_blocks(count : Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
+    public func fetch_bitcoin_blocks(count: Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
         if (current_block_hash == "") {
             return #err({ message = "Block hash not set" });
         };
         var blocks : [Types.BitcoinBlock] = [];
         var current_count = count;
+        var block_hash = current_block_hash;
 
-        while (current_count > 0) {
+        while (current_count > 0 and block_hash != "") {
             let block_result = await get_bitcoin_block_info();
             switch (block_result) {
                 case (#ok(block_data)) {
                     blocks := Array.append(blocks, [block_data]);
-                    current_block_hash := block_data.previousblockhash;
+                    block_hash := block_data.previousblockhash;
+                    current_block_hash := block_data.previousblockhash; // Update the current_block_hash for next call
                 };
                 case (#err(error)) {
                     return #err(error);
@@ -110,7 +113,36 @@ actor {
             current_count -= 1;
         };
 
+        stableBlocks := Array.append(stableBlocks, blocks); // Append the fetched blocks to stable variable
         return #ok(blocks);
+    };
+
+    public func fetch_blocks_queue(count: Nat) : async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
+        var all_blocks : [Types.BitcoinBlock] = [];
+        var remaining_count = count;
+        var block_hash = current_block_hash;
+
+        while (remaining_count > 0 and block_hash != "") {
+            let blocks_result = await fetch_bitcoin_blocks(1);
+            switch (blocks_result) {
+                case (#ok(blocks)) {
+                    if (blocks.size() > 0) {
+                        let last_block = blocks[blocks.size() - 1];
+                        all_blocks := Array.append(all_blocks, blocks);
+                        block_hash := last_block.previousblockhash;
+                        current_block_hash := last_block.previousblockhash; // Update the current_block_hash for next call
+                        remaining_count -= 1;
+                    } else {
+                        return #err({ message = "No blocks fetched" });
+                    };
+                };
+                case (#err(error)) {
+                    return #err(error);
+                };
+            };
+        };
+
+        return #ok(all_blocks);
     };
 
     public func get_bitcoin_block_transactions() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
@@ -248,5 +280,26 @@ actor {
                 return #err({ message = "Failed to convert JSON to AddressInfo" });
             };
         };
+    };
+
+    // Pre-upgrade hook
+    system func preupgrade() {
+        Debug.print("Executing preupgrade...");
+    };
+
+    // Post-upgrade hook
+    system func postupgrade() {
+        Debug.print("Executing postupgrade...");
+    };
+
+    // Reset memory function
+    public func reset_memory(): async Errors.Result<Text, Errors.MempoolError> {
+        stableBlocks := [];
+        return #ok("Memory reset successfully");
+    };
+
+    // Function to get the stable blocks
+    public query func get_stable_blocks(): async [Types.BitcoinBlock] {
+        return stableBlocks;
     };
 };
