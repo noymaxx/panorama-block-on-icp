@@ -12,6 +12,7 @@ import {
 } from 'recharts'
 import styles from './time-transactions-chart-styles.module.scss'
 import { Skeleton } from '@mui/material'
+import { dayInterval } from '../../../../../utils/day-interval'
 
 type Props = {
   data: any
@@ -106,31 +107,19 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
     return null
   }
 
-  const timeDifference = (date1: any, date2: any) => {
-    date1 = new Date(date1 * 1000)
-    date2 = new Date(date2 * 1000)
-    const difference = date1 - date2;
-
-    const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-    console.log(daysDifference)
-    return daysDifference
-  }
-
   const generateData = () => {
-    const max = timeDifference(data[0].timestamp, data[data.length - 1].timestamp)
+    const max = dayInterval(data[0].timestamp, data[data.length - 1].timestamp)
     const newData: any = Array.from({ length: max }, () => new Object({ 'transactions': 0, name: '' }))
-    console.log(newData)
     let lastDiff = 0
 
     data.map((item: any) => {
-      let diff = timeDifference(data[0].timestamp, item.timestamp)
+      let diff = dayInterval(data[0].timestamp, item.timestamp)
 
       if (diff === lastDiff && diff < max) {
         newData[diff]['transactions'] += Number(item["tx_count"])
         if (!newData[diff].name) {
           newData[diff].name = diff === 0 ? 'Last day' : `${diff} ${diff === 1 ? 'day' : 'days'}  before`
         }
-        console.log(newData)
       }
       else {
         lastDiff = diff
@@ -141,7 +130,7 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
   }
 
   useEffect(() => {
-    setDays(timeDifference(data[0].timestamp, data[data.length - 1].timestamp))
+    setDays(dayInterval(data[0].timestamp, data[data.length - 1].timestamp))
   }, [])
 
   return (

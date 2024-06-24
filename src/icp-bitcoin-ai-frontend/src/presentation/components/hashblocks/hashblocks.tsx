@@ -18,53 +18,6 @@ type HashblockProps = {
 
 const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
   const hashblocksRef = useRef<any>(null)
-  // const [data, setData] = useState<HashblockProps[]>([
-  // {
-  //   id: '[124012901249]',
-  //   value: '845,982',
-  //   date: 'Today, 16:54'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '1234,513',
-  //   date: 'Yesterday, 18:24'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '687,213',
-  //   date: '2 days ago, 17:21'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '764,576',
-  //   date: '3 days ago, 12:46'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '845,154',
-  //   date: '4 days ago, 16:26'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '542,133',
-  //   date: '4 days ago, 04:23'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '875,361',
-  //   date: '5 days ago, 17:41'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '237,618',
-  //   date: '5 days ago, 16:47'
-  // },
-  // {
-  //   id: '[124012901249]',
-  //   value: '571,541',
-  //   date: '6 days ago, 16:16'
-  // },
-  // ])
   const [isMouseDown, setIsMouseDown] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
@@ -131,14 +84,14 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
         {
           data ? data.slice(0, 50).map((item: HashblockProps, index: number) => {
             return (
-              <>
+              <React.Fragment key={`hashblock-${index}`}>
                 {index > 0 && (
                   <div
                     className={styles.divider}
-                    key={`divider - ${index}`}
+                    key={`divider-${index}`}
                   ></div>
                 )}
-                <div className={styles.card} key={`hashblock - ${index}`}>
+                <div className={styles.card}>
                   <div className={styles.info}>
                     <Tooltip title={item.id} placement="right-start">
                       <p className={styles.id}>{item.id}</p>
@@ -171,14 +124,14 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                     </div>
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             );
           })
             : Array(100).fill(0).map((item, index) => {
-              return <>
-                {index > 0 && < div className={styles.divider} key={`divider - ${index}`}></div >}
+              return <React.Fragment key={`hashblock-${index}`}>
+                {index > 0 && < div className={styles.divider}></div >}
                 <Skeleton className={styles.card} variant="rounded" width={200} height={200} />
-              </>
+              </React.Fragment>
             })
         }
       </div>
