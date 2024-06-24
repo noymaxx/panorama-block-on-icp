@@ -1,5 +1,5 @@
 import { createActor } from "../../../../declarations/mempool"
-
+import data from './data.json'
 
 const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID);
 
@@ -7,7 +7,7 @@ const IcpService = {
   setblock: async () => {
     try {
       const response = await actor.set_block_hash(
-        "000000000000000000024c7cd38045d8e7fe447e12a3a916161e603dcdd35414"
+        "000000000000000000031b5866b8a3702b70c44b751be809462a6adc5d490fc7"
       );
       return response
     } catch (error) {
@@ -22,9 +22,19 @@ const IcpService = {
       return error
     }
   },
-  getHashblocks: async (count: bigint) => {
+  getHashblocks: async () => {
     try {
-      const response = await actor.fetch_bitcoin_blocks(count)
+      const response = await actor.get_stable_blocks()
+      return response
+    }
+    catch (error) {
+      return error
+    }
+  },
+  getHashblocksCached: (count: bigint) => {
+    try {
+      const response = { ok: data.hashblocks }
+      console.log(response)
       return response
     }
     catch (error) {
