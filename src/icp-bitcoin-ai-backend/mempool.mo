@@ -299,7 +299,7 @@ actor {
     };
 
     // Function to get the stable blocks
-    public query func get_stable_blocks(): async [Types.BitcoinBlock] {
-        return stableBlocks;
+    public query func get_stable_blocks(): async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
+        return #ok(stableBlocks);
     };
 };

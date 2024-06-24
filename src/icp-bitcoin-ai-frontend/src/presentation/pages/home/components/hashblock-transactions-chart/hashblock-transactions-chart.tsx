@@ -95,16 +95,12 @@ const HashblockTransactionsChart: React.FC<Props> = ({ data }: Props) => {
 
   const handleMouseEnter = (o: any) => {
     const { dataKey } = o
-    console.log(opacity)
-    console.log(data)
 
     setOpacity((op) => ({ ...op, [dataKey]: 0.1 }))
   }
 
   const handleMouseLeave = (o: any) => {
     const { dataKey } = o
-    console.log(opacity)
-
 
     setOpacity((op) => ({ ...op, [dataKey]: 1 }))
   }

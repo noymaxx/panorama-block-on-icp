@@ -10,6 +10,7 @@ import Header from '../../components/header/header'
 import InfoModal from '../../components/info-modal/info-modal'
 import TransactionInfo from './components/transaction-info/transaction-info'
 import AddressInfo from './components/address-info/address-info'
+import { dayInterval } from '../../../utils/day-interval'
 
 const Home: React.FC = () => {
   const [actual, setActual] = useState('Bitcoin')
@@ -26,31 +27,35 @@ const Home: React.FC = () => {
     }
   )
 
+  const verifyCacheInterval = (cache: any) => {
+    if (cache.date) {
+      const interval = dayInterval(Date.now(), cache.date)
+
+      if (interval >= 0 && interval < 1) {
+        return true
+      }
+    }
+    return false
+  }
+
   useEffect(() => {
     const getHashblocks = async (): Promise<void> => {
       const cache = localStorage.getItem('hashblocks')
-      if (cache) {
+      if (cache && verifyCacheInterval(JSON.parse(cache))) {
         console.log('cache')
-        console.log(JSON.parse(cache))
 
-        setHashblocks(JSON.parse(cache))
-        // localStorage.clear()
+        setHashblocks(JSON.parse(cache).ok)
       }
       else {
-        const block = await IcpService.setblock()
-
-        const info = await IcpService.getBlockInfo()
-
-        const response: any = await IcpService.getHashblocksCached(BigInt(50))
+        const response: any = await IcpService.getHashblocks()
 
         if (response.ok) {
-          const json = jsonParseBigint(response.ok)
-          console.log(json)
-          setHashblocks(json)
+          localStorage.clear()
+          const json = jsonParseBigint(response)
+          json.date = Date.now()
+          setHashblocks(json.ok)
           localStorage.setItem('hashblocks', JSON.stringify(json))
         }
-        // const json = jsonParseBigint()
-        // console.log(json)
       }
     }
 

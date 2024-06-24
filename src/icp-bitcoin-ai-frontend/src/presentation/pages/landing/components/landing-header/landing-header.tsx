@@ -32,7 +32,6 @@ const LandingHeader: React.FC = () => {
       onSuccess: async () => {
         const identity = authClient.getIdentity();
         const agent = new HttpAgent({ identity });
-        console.log("o tal do polling: ", agent)
         const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID, {
           agent,
         });
@@ -48,9 +47,8 @@ const LandingHeader: React.FC = () => {
         {navItems.map((item, index) => (
           <div
             key={index}
-            className={`${styles.navItem} ${
-              active === index ? styles.active : ""
-            }`}
+            className={`${styles.navItem} ${active === index ? styles.active : ""
+              }`}
             onClick={() => {
               setActive(index);
               index === 1 && window.scrollTo({ top: 600, behavior: "smooth" });

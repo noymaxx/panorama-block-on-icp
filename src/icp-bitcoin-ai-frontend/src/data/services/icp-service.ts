@@ -22,9 +22,9 @@ const IcpService = {
       return error
     }
   },
-  getHashblocks: async (count: bigint) => {
+  getHashblocks: async () => {
     try {
-      const response = await actor.fetch_bitcoin_blocks(count)
+      const response = await actor.get_stable_blocks()
       return response
     }
     catch (error) {
