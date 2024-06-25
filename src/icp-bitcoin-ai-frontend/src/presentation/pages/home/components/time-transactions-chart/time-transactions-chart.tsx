@@ -109,13 +109,13 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
 
   const generateData = () => {
     const max = dayInterval(data[0].timestamp, data[data.length - 1].timestamp)
-    const newData: any = Array.from({ length: max }, () => new Object({ 'transactions': 0, name: '' }))
+    const newData: any = Array.from({ length: max > 0 ? max : 1 }, () => new Object({ 'transactions': 0, name: '' }))
     let lastDiff = 0
 
     data.map((item: any) => {
       let diff = dayInterval(data[0].timestamp, item.timestamp)
 
-      if (diff === lastDiff && diff < max) {
+      if (diff === lastDiff && (max === 0 || diff < max)) {
         newData[diff]['transactions'] += Number(item["tx_count"])
         if (!newData[diff].name) {
           newData[diff].name = diff === 0 ? 'Last day' : `${diff} ${diff === 1 ? 'day' : 'days'}  before`
@@ -137,7 +137,7 @@ const TimeTransactionsChart: React.FC<Props> = ({ data }: Props) => {
     <>
       {
         data ? <div className={styles.chart}>
-          <h2 className={styles.title}>Last {days} days</h2>
+          <h2 className={styles.title}>Last {days > 1 ? `${days} days` : 'day'}</h2>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={generateData()}

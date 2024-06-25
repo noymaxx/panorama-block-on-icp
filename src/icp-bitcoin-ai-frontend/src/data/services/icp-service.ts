@@ -34,7 +34,6 @@ const IcpService = {
   getHashblocksCached: (count: bigint) => {
     try {
       const response = { ok: data.hashblocks }
-      console.log(response)
       return response
     }
     catch (error) {
