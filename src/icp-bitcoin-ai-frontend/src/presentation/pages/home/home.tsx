@@ -100,7 +100,8 @@ const Home: React.FC = () => {
         modalOpened && <InfoModal data={info} onClose={() => handleClose()}>
           {
             info?.type === 'address' ? <AddressInfo title="Address Information" data={info?.['ok']} />
-              : <TransactionInfo title="Transaction Information" data={info?.['ok'] && info?.['ok'][0] !== 'Invalid hex string' && JSON.parse(info?.['ok'][0])} />
+              // : <TransactionInfo title="Transaction Information" data={info?.['ok'] && info?.['ok'][0] !== 'Invalid hex string' && JSON.parse(info?.['ok'][0])} />
+              : <TransactionInfo title="Transaction Information" data={info} />
           }
         </InfoModal>
       }
