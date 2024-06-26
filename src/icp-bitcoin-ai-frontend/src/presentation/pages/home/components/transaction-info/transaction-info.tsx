@@ -11,6 +11,7 @@ const TransactionInfo: React.FC<Props> = ({ title, data }: Props) => {
   useEffect(() => {
     if (JSON.stringify(data).includes("txid")) {
       setInfo(JSON.parse(data?.['ok'][0]))
+      console.log(info)
     }
   }, [])
 
@@ -24,6 +25,7 @@ const TransactionInfo: React.FC<Props> = ({ title, data }: Props) => {
       <p><b>Size:</b> {info.size}</p>
       <p><b>Value:</b> {(info.vout[0].value / 100000000)} BTC</p>
       <p><b>Fee:</b> {info.fee} SATS</p>
+      <p><b>Address:</b> {info.vout[0].scriptpubkey_address}</p>
     </div>
   )
 }
