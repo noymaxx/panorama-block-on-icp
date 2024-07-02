@@ -17,6 +17,7 @@ type Item = {
 const navItems: Item[] = [
   { title: "Home", url: "/#home" },
   { title: "About", url: "#about" },
+  { title: "Docs", url: "https://docs.panoramablock.com/" },
 ];
 
 const LandingHeader: React.FC = () => {
@@ -28,7 +29,7 @@ const LandingHeader: React.FC = () => {
     const authClient = await AuthClient.create();
 
     await authClient.login({
-      identityProvider: import.meta.env.II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
+      identityProvider: import.meta.env.VITE_II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
       onSuccess: async () => {
         const identity = authClient.getIdentity();
         const agent = new HttpAgent({ identity });
@@ -42,30 +43,37 @@ const LandingHeader: React.FC = () => {
 
   return (
     <div className={styles.header}>
-      <img className={styles.logo} src="/Logo.png" alt="" />
-      <nav className={styles.navigation}>
-        {navItems.map((item, index) => (
-          <div
-            key={index}
-            className={`${styles.navItem} ${active === index ? styles.active : ""
-              }`}
-            onClick={() => {
-              setActive(index);
-              index === 1 && window.scrollTo({ top: 600, behavior: "smooth" });
-            }}
-          >
-            {item.title}
-          </div>
-        ))}
-      </nav>
-      <div className={styles.connect}>
-        <Button
-          type="wallet"
-          title="Connect Wallet"
-          onClick={handleConnectWallet}
-        />
+      <div className={styles.container}>
+        <img className={styles.logo} src="/Logo.png" alt="" />
+        <nav className={styles.navigation}>
+          {navItems.map((item, index) => (
+            item.title !== "Docs" ? (
+              <div
+                key={index}
+                className={`${styles.navItem} ${active === index ? styles.active : ""
+                  }`}
+                onClick={() => {
+                  setActive(index);
+                  index === 1 && window.scrollTo({ top: 1024, behavior: "smooth" });
+                }}
+              >
+                {item.title}
+              </div>
+            )
+              : (
+                <a className={`${styles.navItem} ${active === index ? styles.active : ""}`} href={item.url} target="__blank">{item.title}</a>
+              )
+          ))}
+        </nav>
+        <div className={styles.connect}>
+          <Button
+            type="wallet"
+            title="Launch App"
+            onClick={handleConnectWallet}
+          />
+        </div>
       </div>
-    </div>
+    </div >
   );
 };
 
