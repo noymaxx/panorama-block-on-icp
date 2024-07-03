@@ -1,40 +1,46 @@
 .header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: calc(100% - 40px);
-  max-width: 1280px;
-  height: 60px;
-  padding: 40px 0;
-  margin: 0 40px;
+  justify-content: center;
+  width: 100vw;
+  background-color: #3030304b;
 
-  .logo {
-    margin-top: 6px;
-    width: 240px;
-  }
-
-  .navigation {
+  .container {
     display: flex;
-    gap: 30px;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 40px);
+    max-width: 1280px;
+    height: 30px;
+    padding: 20px 0;
+    margin: 0 20px;
 
-    font-size: 20px;
-    color: #c4c4c4;
-    cursor: pointer;
+    .logo {
+      margin-top: 6px;
+      width: 240px;
+    }
 
-    a {
-      text-decoration: none;
+    .navigation {
+      display: flex;
+      gap: 30px;
+
+      font-size: 20px;
       color: #c4c4c4;
-      font-weight: bold;
+      cursor: pointer;
+
+      a {
+        text-decoration: none;
+        color: #c4c4c4;
+      }
+
+      .active {
+        color: white;
+      }
     }
 
-    .active {
-      color: white;
+    .connect {
+      display: flex;
+      justify-content: flex-end;
+      width: 240px;
     }
-  }
-
-  .connect {
-    display: flex;
-    justify-content: flex-end;
-    width: 240px;
   }
 }
