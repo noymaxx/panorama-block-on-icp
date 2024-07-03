@@ -8,12 +8,38 @@ import AssessmentIcon from '@mui/icons-material/Assessment'
 import AutoGraphIcon from '@mui/icons-material/AutoGraph'
 import HubIcon from '@mui/icons-material/Hub'
 import LandingFooter from './components/landing-footer/landing-footer'
+import { AuthClient } from "@dfinity/auth-client";
+import { HttpAgent } from "@dfinity/agent"
+import { createActor } from "../../../../../declarations/mempool";
+import { useNavigate } from 'react-router-dom'
+
+// const host = "http://localhost:4943/";
+// const host = "https://identity.ic0.app";
 
 const Landing: React.FC = () => {
   const [scrollPosition, setScrollPosition] = useState(0)
+  const navigate = useNavigate()
+
   const handleScroll = () => {
     const position = window.pageYOffset
     setScrollPosition(position)
+  }
+
+  // Função para conectar com o Internet Identity
+  const handleConnectWallet = async () => {
+    const authClient = await AuthClient.create()
+
+    await authClient.login({
+      identityProvider: import.meta.env.VITE_II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
+      onSuccess: async () => {
+        const identity = authClient.getIdentity()
+        const agent = new HttpAgent({ identity })
+        const actor = createActor(import.meta.env.MEMPOOL_CANISTER_ID, {
+          agent,
+        })
+        navigate("/home")
+      },
+    })
   }
 
   useEffect(() => {
@@ -27,7 +53,7 @@ const Landing: React.FC = () => {
   return (
     <div className={styles.landing}>
       <div id='home' className={styles.container}>
-        <LandingHeader />
+        <LandingHeader connect={handleConnectWallet} />
         <div className={`${styles.section} ${styles.intro}`}>
           <h1 className={styles.title}>
             {/* On-chain data availability on the <span className={styles.highlight}>ICP blockchain</span> */}
@@ -162,7 +188,7 @@ const Landing: React.FC = () => {
 
         </div>
 
-        <LandingFooter />
+        <LandingFooter connect={handleConnectWallet} />
 
         {
           scrollPosition >= 100 && <div className={styles.goToTop} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
