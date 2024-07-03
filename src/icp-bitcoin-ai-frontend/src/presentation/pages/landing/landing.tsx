@@ -72,7 +72,7 @@ const Landing: React.FC = () => {
           </div>
         </div>
 
-        <div id='team' className={`${styles.section} ${styles.team}`}>
+        <div id='products' className={`${styles.section} ${styles.products}`}>
           <div className={styles.sectionTitle}>
             <h2>Our Products</h2>
           </div>
@@ -128,54 +128,38 @@ const Landing: React.FC = () => {
           </div>
         </div>
 
-        <div id='tech' className={`${styles.section} ${styles.tech}`}>
+        <div id='partners' className={`${styles.section} ${styles.partners}`}>
           <div className={styles.sectionTitle}>
-            <h2>Our Products</h2>
+            <h2>Partners</h2>
           </div>
           <div className={styles.sectionBody}>
-            <div className={styles.topic}>
-              <div className={styles.icon}>
-                <AssessmentIcon />
+            <div className={styles.row}>
+              <div className={styles.card}>
+                <img src="partners/ucla.webp" alt="" />
               </div>
 
-              <h2>PANO RANKING</h2>
+              <div className={styles.card}>
+                <img src="partners/icp.png" alt="" />
+              </div>
 
-              <p>
-                Advanced scorecards for different Web3
-                verticals, such as DeFi, NFT, DEXs, Yield
-                Protocols, etc. utilizing sophisticated AI
-                and ML tools to derive alpha-seeking
-                insights and uncover opportunities.
-              </p>
+              <div className={styles.card}>
+                <img src="partners/inteli.png" alt="" />
+              </div>
             </div>
 
-            <div className={styles.topic}>
-              <div className={styles.icon}>
-                <AutoGraphIcon />
+            <div className={styles.row}>
+
+
+              <div className={`${styles.card} ${styles.white}`}>
+                <img src="partners/lmu.png" alt="" />
               </div>
 
-              <h2>LIQUID PATH</h2>
-
-              <p>Our Vision is to become the leading Web3 on-chain decentralized data aggregator utilizing the latest AI & ML tools to help users discover excess returns and risk mitigation strategies.</p>
-            </div>
-
-            <div className={styles.topic}>
-              <div className={styles.icon}>
-                <HubIcon />
+              <div className={`${styles.card} ${styles.white}`}>
+                <img src="partners/ucla-blockchain.png" alt="" />
               </div>
-
-              <h2>AI-INSIGHT HUB</h2>
-
-              <p>
-                A comprehensive platform and
-                marketplace for developers, creators, and
-                businesses to find, hire and connect with
-                each other revolutionizing on-chain data
-                access, innovation, and open-source
-                community engagement.
-              </p>
             </div>
           </div>
+
         </div>
 
         <LandingFooter />

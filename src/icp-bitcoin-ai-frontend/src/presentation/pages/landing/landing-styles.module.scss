@@ -37,7 +37,7 @@
       max-width: 1400px;
       justify-self: center;
       width: 100%;
-      min-height: 95vh;
+      min-height: 100vh;
       align-self: center;
 
       .title {
@@ -143,10 +143,10 @@
       }
     }
 
-    .team {
+    .products {
       width: 100%;
       max-width: 100%;
-      height: 100%;
+      // height: 100%;
       position: relative;
       margin-bottom: 120px;
 
@@ -189,9 +189,9 @@
       .sectionBody {
         display: flex;
         flex-direction: row;
-        gap: 60px;
+        gap: 40px;
         min-height: 280px;
-        padding: 20px;
+        padding: 40px;
 
         .topic {
           display: flex;
@@ -222,9 +222,10 @@
       }
     }
 
-    .tech {
+    .partners {
       width: 100%;
       display: flex;
+      // height: fit-content;
       margin-bottom: 120px;
 
       .icon {
@@ -250,30 +251,30 @@
 
       .sectionBody {
         display: flex;
-        flex-direction: row;
-        gap: 60px;
-        min-height: 280px;
+        flex-direction: column;
+        gap: 40px;
+        min-height: 300px;
         padding: 20px;
 
-        .topic {
+        .row {
           display: flex;
-          flex-direction: column;
-          gap: 20px;
+          // justify-content: center;
+          gap: 40px;
 
-          h2 {
-            max-width: 300px;
-            font-size: 24px;
-            text-shadow: #080808 3px 0 6px;
+          .card {
+            display: flex;
+            background-color: #b6b6b630;
+            padding: 20px;
+            border-radius: 9px;
+
+            img {
+              width: 260px;
+              height: 120px;
+            }
           }
 
-          p {
-            max-width: 400px;
-            font-size: 18px;
-            line-height: 1.5;
-            text-shadow: #080808 3px 0 6px;
-            // color: #d1d1d1;
-            color: #a0a0a0;
-            text-shadow: #080808 3px 0 6px;
+          .white {
+            background-color: #b6b6b675;
           }
         }
       }
