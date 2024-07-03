@@ -200,7 +200,7 @@ actor {
             transform = ?transform_context;
         };
 
-        Cycles.add<system>(1_603_124_000);
+        Cycles.add<system>(20_849_956_400);
 
         let http_response_tx : Types.HttpResponsePayload = await ic.http_request(http_request_tx);
 
@@ -255,7 +255,7 @@ actor {
             transform = ?transform_context;
         };
 
-        Cycles.add<system>(1_603_124_000);
+        Cycles.add<system>(20_849_956_400);
 
         let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
 

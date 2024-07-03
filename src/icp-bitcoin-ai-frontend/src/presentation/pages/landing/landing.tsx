@@ -34,7 +34,7 @@ const Landing: React.FC = () => {
       onSuccess: async () => {
         const identity = authClient.getIdentity()
         const agent = new HttpAgent({ identity })
-        const actor = createActor(import.meta.env.MEMPOOL_CANISTER_ID, {
+        const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID, {
           agent,
         })
         navigate("/home")
