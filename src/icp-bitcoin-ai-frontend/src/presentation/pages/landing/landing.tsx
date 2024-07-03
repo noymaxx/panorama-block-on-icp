@@ -69,6 +69,7 @@ const Landing: React.FC = () => {
             source of truth for on-chain data, integrating Web3 and
             Web2 data and cross-chain interoperability.
           </p>
+          <img className={styles.bg} src="bg.png" alt="" />
         </div>
 
         <div id='about' className={`${styles.section} ${styles.about}`}>
@@ -152,6 +153,8 @@ const Landing: React.FC = () => {
               </p>
             </div>
           </div>
+
+          <img className={styles.bg} src="bg.png" alt="" />
         </div>
 
         <div id='partners' className={`${styles.section} ${styles.partners}`}>

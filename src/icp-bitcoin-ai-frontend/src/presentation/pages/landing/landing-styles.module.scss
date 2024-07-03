@@ -1,10 +1,7 @@
 .landing {
   display: flex;
   justify-content: center;
-  // background: linear-gradient(120.84deg, rgba(16, 27, 82, 0.9) 10%, rgb(0, 0, 2) 100%);
   background-color: #0b0b0b;
-  // background-image: url('/teste.jpg');
-  // background-size: contain;
   color: #d1d1d1;
 
   -webkit-scrollbar {
@@ -16,7 +13,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    // width: 90vw;
     min-height: 100vh;
     z-index: 1;
     overflow-x: hidden;
@@ -29,8 +25,6 @@
       min-height: 600px;
       max-width: 1280px;
       margin: 0 40px;
-
-      // padding: 20px;
     }
 
     .intro {
@@ -56,14 +50,13 @@
       }
 
 
-      &::after {
+      .bg {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: url("bg.png");
         background-size: cover;
         background-repeat: no-repeat;
         z-index: -1;
@@ -75,9 +68,7 @@
         max-width: 800px;
         font-size: 24px;
         line-height: 1.5;
-        // color: #d1d1d1;
         color: #ececec;
-        // text-shadow: #080808 3px 0 6px;
         text-shadow: #080808 3px 0 6px;
 
         .highlight {
@@ -150,14 +141,13 @@
       position: relative;
       margin-bottom: 120px;
 
-      &::after {
+      .bg {
         position: absolute;
         content: "";
         top: 0;
         left: 0;
         width: 100vw;
         height: 100%;
-        background: url("team.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         opacity: 0.5;
@@ -214,7 +204,6 @@
             font-size: 18px;
             line-height: 1.5;
             text-shadow: #080808 3px 0 6px;
-            // color: #d1d1d1;
             color: #a0a0a0;
             text-shadow: #080808 3px 0 6px;
           }
@@ -225,7 +214,6 @@
     .partners {
       width: 100%;
       display: flex;
-      // height: fit-content;
       margin-bottom: 120px;
 
       .icon {
@@ -258,7 +246,6 @@
 
         .row {
           display: flex;
-          // justify-content: center;
           gap: 40px;
 
           .card {
