@@ -35,7 +35,7 @@ type Props = {
 
 const LandingFooter: React.FC<Props> = ({ connect }: Props) => {
   return (
-    <div className={styles.landingFooter}>
+    <div className={styles.footer}>
       <div className={styles.row}>
         <div className={styles.column}>
           <img className={styles.logo} src="/Logo.png" alt="" />

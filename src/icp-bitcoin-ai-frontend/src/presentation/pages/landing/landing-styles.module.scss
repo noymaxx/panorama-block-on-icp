@@ -383,6 +383,10 @@
 @media (width < 768px) {
   .landing {
     .container {
+      .intro {
+        min-height: 80vh;
+      }
+
       .partners {
         .sectionTitle {
           margin-top: 20px;
