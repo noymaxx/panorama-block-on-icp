@@ -289,3 +289,131 @@
     }
   }
 }
+
+@media (width < 1024px) {
+  .landing {
+    .container {
+      .section {
+        margin-bottom: 0px;
+
+        .title {
+          font-size: 26px;
+        }
+
+        .description {
+          width: 80%;
+          font-size: 18px;
+        }
+
+        h2 {
+          font-size: 22px;
+        }
+
+        .sectionBody {
+          flex-direction: column;
+          gap: 30px;
+
+          .topic {
+            padding: 20px;
+
+            .icon {
+              padding: 10px;
+
+              svg {
+                width: 24px;
+                height: 24px;
+              }
+            }
+
+            h2 {
+              font-size: 18px;
+            }
+
+            p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      .products {
+        padding: 20px 0;
+
+        .sectionBody {
+          padding: 10px 30px;
+        }
+      }
+
+      .partners {
+        min-height: 0px;
+
+        .sectionTitle {
+          margin-top: 20px;
+        }
+
+        .sectionBody {
+          margin-top: 10px;
+          padding: 0px 20px;
+
+          .row {
+            gap: 20px;
+
+            .card {
+              display: flex;
+              background-color: #b6b6b630;
+              padding: 20px;
+              border-radius: 9px;
+
+              img {
+                width: 150px;
+                height: 80px;
+              }
+            }
+
+            .white {
+              background-color: #b6b6b675;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (width < 768px) {
+  .landing {
+    .container {
+      .partners {
+        .sectionTitle {
+          margin-top: 20px;
+        }
+
+        .sectionBody {
+          gap: 30px;
+          margin-bottom: 40px;
+
+          .row {
+            flex-direction: column;
+            gap: 30px;
+
+            .card {
+              display: flex;
+              background-color: #b6b6b630;
+              padding: 20px;
+              border-radius: 9px;
+
+              img {
+                width: 200px;
+                height: 100px;
+              }
+            }
+
+            .white {
+              background-color: #b6b6b675;
+            }
+          }
+        }
+      }
+    }
+  }
+}
