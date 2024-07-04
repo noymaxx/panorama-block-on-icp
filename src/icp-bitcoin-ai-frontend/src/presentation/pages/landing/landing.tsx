@@ -156,7 +156,7 @@ const Landing: React.FC = () => {
 
         <div id='partners' className={`${styles.section} ${styles.partners}`}>
           <div className={styles.sectionTitle}>
-            <h2>Our Partners</h2>
+            <h2>Our Network</h2>
           </div>
           <div className={styles.sectionBody}>
             <div className={styles.row}>
