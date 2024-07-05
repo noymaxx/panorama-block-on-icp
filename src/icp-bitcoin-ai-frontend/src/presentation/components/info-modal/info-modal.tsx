@@ -29,8 +29,8 @@ const InfoModal: React.FC<Props> = ({ data, onClose, children }: Props) => {
     <Modal
       open={true}
       onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{

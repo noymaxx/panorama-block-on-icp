@@ -5,9 +5,10 @@ import { Skeleton, Tooltip } from '@mui/material'
 type Props = {
   coin: string
   data: any
+  onSelect: (hashblock: any) => void
 }
 
-type HashblockProps = {
+export type HashblockProps = {
   id: string
   size: string
   height: string
@@ -16,7 +17,7 @@ type HashblockProps = {
   timestamp: string
 }
 
-const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
+const Hashblocks: React.FC<Props> = ({ coin, data, onSelect }: Props) => {
   const hashblocksRef = useRef<any>(null)
   const [isMouseDown, setIsMouseDown] = useState(false)
   const [startX, setStartX] = useState(0)
@@ -91,7 +92,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data }: Props) => {
                     key={`divider-${index}`}
                   ></div>
                 )}
-                <div className={styles.card}>
+                <div className={styles.card} onClick={() => onSelect(item)}>
                   <div className={styles.info}>
                     <Tooltip title={item.id} placement="right-start">
                       <p className={styles.id}>{item.id}</p>

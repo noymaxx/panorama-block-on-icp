@@ -11,11 +11,14 @@ import InfoModal from '../../components/info-modal/info-modal'
 import TransactionInfo from './components/transaction-info/transaction-info'
 import AddressInfo from './components/address-info/address-info'
 import { dayInterval } from '../../../utils/day-interval'
+import HashblockInfo from './components/hashblock-info/hashblock-info'
 
 const Home: React.FC = () => {
   const [actual, setActual] = useState('Bitcoin')
+  const [actualHashblock, setActualHashblock] = useState(null)
   const [hashblocks, setHashblocks] = useState()
   const [modalOpened, setModalOpened] = useState(false)
+  const [hashblockOpened, setHashblockOpened] = useState(false)
   const [info, setInfo] = useState<any>()
   const [data, setData] = useState<NetworkData>(
     {
@@ -82,12 +85,23 @@ const Home: React.FC = () => {
     setModalOpened(false)
   }
 
+  const handleHashblock = (hashblock?: any) => {
+    if (hashblock) {
+      setActualHashblock(hashblock)
+      setHashblockOpened(true)
+    }
+    else {
+      setActualHashblock(null)
+      setHashblockOpened(false)
+    }
+  }
+
   return (
     <div className={styles.home}>
       <Sidebar actual={actual} onChange={(coin) => setActual(coin)} />
       <div className={styles.container}>
         <Header onSubmit={handleGetInfo} />
-        <Hashblocks coin={actual} data={hashblocks} />
+        <Hashblocks coin={actual} data={hashblocks} onSelect={(hashblock: any) => handleHashblock(hashblock)} />
         <div className={styles.info}>
           <Network data={data} />
           <CustomTabs
@@ -104,6 +118,10 @@ const Home: React.FC = () => {
               : <TransactionInfo title="Transaction Information" data={info} />
           }
         </InfoModal>
+      }
+
+      {
+        hashblockOpened && actualHashblock && <HashblockInfo data={actualHashblock} onClose={() => handleHashblock()} />
       }
     </div>
   )
