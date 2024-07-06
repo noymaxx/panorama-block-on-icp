@@ -1,10 +1,7 @@
 .landing {
   display: flex;
   justify-content: center;
-  // background: linear-gradient(120.84deg, rgba(16, 27, 82, 0.9) 10%, rgb(0, 0, 2) 100%);
   background-color: #0b0b0b;
-  // background-image: url('/teste.jpg');
-  // background-size: contain;
   color: #d1d1d1;
 
   -webkit-scrollbar {
@@ -16,7 +13,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    // width: 90vw;
     min-height: 100vh;
     z-index: 1;
     overflow-x: hidden;
@@ -29,8 +25,6 @@
       min-height: 600px;
       max-width: 1280px;
       margin: 0 40px;
-
-      // padding: 20px;
     }
 
     .intro {
@@ -56,14 +50,13 @@
       }
 
 
-      &::after {
+      .bg {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: url("bg.png");
         background-size: cover;
         background-repeat: no-repeat;
         z-index: -1;
@@ -75,9 +68,7 @@
         max-width: 800px;
         font-size: 24px;
         line-height: 1.5;
-        // color: #d1d1d1;
         color: #ececec;
-        // text-shadow: #080808 3px 0 6px;
         text-shadow: #080808 3px 0 6px;
 
         .highlight {
@@ -150,14 +141,13 @@
       position: relative;
       margin-bottom: 120px;
 
-      &::after {
+      .bg {
         position: absolute;
         content: "";
         top: 0;
         left: 0;
         width: 100vw;
         height: 100%;
-        background: url("team.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         opacity: 0.5;
@@ -214,7 +204,6 @@
             font-size: 18px;
             line-height: 1.5;
             text-shadow: #080808 3px 0 6px;
-            // color: #d1d1d1;
             color: #a0a0a0;
             text-shadow: #080808 3px 0 6px;
           }
@@ -225,7 +214,6 @@
     .partners {
       width: 100%;
       display: flex;
-      // height: fit-content;
       margin-bottom: 120px;
 
       .icon {
@@ -258,7 +246,6 @@
 
         .row {
           display: flex;
-          // justify-content: center;
           gap: 40px;
 
           .card {
@@ -298,6 +285,138 @@
       svg {
         width: 24px;
         height: 24px;
+      }
+    }
+  }
+}
+
+@media (width < 1024px) {
+  .landing {
+    .container {
+      .section {
+        margin-bottom: 0px;
+
+        .title {
+          font-size: 26px;
+        }
+
+        .description {
+          width: 80%;
+          font-size: 18px;
+        }
+
+        h2 {
+          font-size: 22px;
+        }
+
+        .sectionBody {
+          flex-direction: column;
+          gap: 30px;
+
+          .topic {
+            padding: 20px;
+
+            .icon {
+              padding: 10px;
+
+              svg {
+                width: 24px;
+                height: 24px;
+              }
+            }
+
+            h2 {
+              font-size: 18px;
+            }
+
+            p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      .products {
+        padding: 20px 0;
+
+        .sectionBody {
+          padding: 10px 30px;
+        }
+      }
+
+      .partners {
+        min-height: 0px;
+
+        .sectionTitle {
+          margin-top: 20px;
+        }
+
+        .sectionBody {
+          margin-top: 10px;
+          padding: 0px 20px;
+
+          .row {
+            gap: 20px;
+
+            .card {
+              display: flex;
+              background-color: #b6b6b630;
+              padding: 20px;
+              border-radius: 9px;
+
+              img {
+                width: 150px;
+                height: 80px;
+              }
+            }
+
+            .white {
+              background-color: #b6b6b675;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (width < 768px) {
+  .landing {
+    .container {
+      .intro {
+        min-height: 80vh;
+      }
+
+      .partners {
+        .sectionTitle {
+          margin-top: 20px;
+        }
+
+        .sectionBody {
+          gap: 30px;
+          margin-bottom: 40px;
+
+          .row {
+            flex-direction: column;
+            gap: 30px;
+
+            .card {
+              display: flex;
+              background-color: #b6b6b630;
+              padding: 20px;
+              border-radius: 9px;
+
+              img {
+                width: 200px;
+                height: 100px;
+              }
+            }
+
+            .white {
+              background-color: #b6b6b675;
+            }
+          }
+        }
       }
     }
   }

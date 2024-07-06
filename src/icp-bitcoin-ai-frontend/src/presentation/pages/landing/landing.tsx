@@ -30,10 +30,12 @@ const Landing: React.FC = () => {
     const authClient = await AuthClient.create()
 
     await authClient.login({
-      identityProvider: import.meta.env.VITE_II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
+      identityProvider: import.meta.env.II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
       onSuccess: async () => {
         const identity = authClient.getIdentity()
-        const agent = new HttpAgent({ identity })
+
+        const host = import.meta.env.VITE_HOST ?? undefined;
+        const agent = new HttpAgent({ host, identity })
         const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID, {
           agent,
         })
@@ -56,12 +58,8 @@ const Landing: React.FC = () => {
         <LandingHeader connect={handleConnectWallet} />
         <div className={`${styles.section} ${styles.intro}`}>
           <h1 className={styles.title}>
-            {/* On-chain data availability on the <span className={styles.highlight}>ICP blockchain</span> */}
             AI-Powered Cross-Chain Analytics: The On-Chain Data Hub built on ICP
           </h1>
-          {/* <p className={styles.description}>
-            <b className={styles.highlight}>Panorama Block</b> is a decentralized hub focused on making data available on-chain. Our mission is to <b className={styles.highlight}>democratize access</b> to Web3, making it transparent and <b className={styles.highlight}>profitable for everyone.</b>
-          </p> */}
           <p className={styles.description}>
             Panorama Block is an on-chain data analytics hub built on
             the Internet Computer (ICP) analyzing various blockchains
@@ -69,6 +67,7 @@ const Landing: React.FC = () => {
             source of truth for on-chain data, integrating Web3 and
             Web2 data and cross-chain interoperability.
           </p>
+          <img className={styles.bg} src="bg.png" alt="" />
         </div>
 
         <div id='about' className={`${styles.section} ${styles.about}`}>
@@ -152,11 +151,13 @@ const Landing: React.FC = () => {
               </p>
             </div>
           </div>
+
+          <img className={styles.bg} src="bg.png" alt="" />
         </div>
 
         <div id='partners' className={`${styles.section} ${styles.partners}`}>
           <div className={styles.sectionTitle}>
-            <h2>Partners</h2>
+            <h2>Our Network</h2>
           </div>
           <div className={styles.sectionBody}>
             <div className={styles.row}>
