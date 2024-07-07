@@ -8,6 +8,7 @@ import Array "mo:base/Array";
 import ExperimentalCycles "mo:base/ExperimentalCycles";
 import JSON "mo:serde/JSON";
 import Iter "mo:base/Iter";
+import HashMap "mo:base/HashMap";
 
 actor {
     var ic: Types.IC = actor("aaaaa-aa");
@@ -15,6 +16,8 @@ actor {
     var current_block_hash: Text = "";
     
     stable var stableBlocks: [Types.BitcoinBlock] = [];
+    stable var stableTransactions: [(Text, [Text])] = [];
+    var transactionMap = HashMap.HashMap<Text, [Text]>(10, Text.equal, Text.hash);
 
     public query func transform(raw: Types.TransformArgs): async Types.CanisterHttpResponsePayload {
         let transformed: Types.CanisterHttpResponsePayload = {
@@ -160,7 +163,7 @@ actor {
             transform = null;
         };
 
-        Cycles.add<system>(1_603_124_000);
+        Cycles.add<system>(1_603_128_000);
 
         let http_response_txids : Types.HttpResponsePayload = await ic.http_request(http_request_txids);
 
@@ -180,7 +183,15 @@ actor {
 
         let txids : ?Types.Transactions = from_candid(json_blob_txids);
         switch (txids) {
-            case (?t) { return #ok(t) };
+            case (?t) {
+                transactionMap.put(current_block_hash, t); 
+                stableTransactions := Iter.toArray(transactionMap.entries());
+                transactionMap := HashMap.fromIter<Text, [Text]>(stableTransactions.vals(), 10, Text.equal, Text.hash);
+                for (key in transactionMap.keys()) {
+                    let _ = transactionMap.remove(key);
+                };
+                return #ok(t) 
+            };
             case (null) {
                 return #err({ message = "Failed to convert JSON to [Text]" });
             };
@@ -217,31 +228,31 @@ actor {
         return #ok(?jsonText);        
     };
 
-    public func fetch_transactions(): async Errors.Result<[?Text], Errors.MempoolError> {
-        let txids_result = await get_bitcoin_block_transactions();
+    // public func fetch_transactions(): async Errors.Result<[?Text], Errors.MempoolError> {
+    //     let txids_result = await get_bitcoin_block_transactions();
 
-        switch (txids_result) {
-            case (#ok(txids)) {
-                func processTxids(txids: [Text], index: Nat, accum: [?Text]): async [?Text] {
-                    if (index == txids.size()) {
-                        return accum;
-                    } else {
-                        let tx_result = await get_bitcoin_transaction_info(txids[index]);
-                        let processed_result: ?Text = switch (tx_result) {
-                            case (#ok(text)) { text };
-                            case (#err(_)) { null };
-                        };
-                        return await processTxids(txids, index + 1, Array.append(accum, [processed_result]));
-                    };
-                };
-                let transactions_details = await processTxids(txids, 0, []);
-                return #ok(transactions_details);
-            };
-            case (#err(e)) {
-                return #err(e);
-            };
-        };
-    };
+    //     switch (txids_result) {
+    //         case (#ok(txids)) {
+    //             func processTxids(txids: [Text], index: Nat, accum: [?Text]): async [?Text] {
+    //                 if (index == txids.size()) {
+    //                     return accum;
+    //                 } else {
+    //                     let tx_result = await get_bitcoin_transaction_info(txids[index]);
+    //                     let processed_result: ?Text = switch (tx_result) {
+    //                         case (#ok(text)) { text };
+    //                         case (#err(_)) { null };
+    //                     };
+    //                     return await processTxids(txids, index + 1, Array.append(accum, [processed_result]));
+    //                 };
+    //             };
+    //             let transactions_details = await processTxids(txids, 0, []);
+    //             return #ok(transactions_details);
+    //         };
+    //         case (#err(e)) {
+    //             return #err(e);
+    //         };
+    //     };
+    // };
 
     public func get_address_info(address: Text): async Errors.Result<Types.AddressInfo, Errors.MempoolError> {
         let url = "https://" # host # "/api/address/" # address;
@@ -284,11 +295,13 @@ actor {
 
     // Pre-upgrade hook
     system func preupgrade() {
+        
         Debug.print("Executing preupgrade...");
     };
 
     // Post-upgrade hook
     system func postupgrade() {
+        stableTransactions := [];
         Debug.print("Executing postupgrade...");
     };
 
@@ -301,5 +314,10 @@ actor {
     // Function to get the stable blocks
     public query func get_stable_blocks(): async Errors.Result<[Types.BitcoinBlock], Errors.MempoolError> {
         return #ok(stableBlocks);
+    };
+
+    // Function to get the stable transactions
+    public query func get_stable_transactions(): async Errors.Result<[(Text, [Text])], Errors.MempoolError> {
+        return #ok(stableTransactions);
     };
 };
