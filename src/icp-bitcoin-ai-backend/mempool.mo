@@ -8,6 +8,7 @@ import Array "mo:base/Array";
 import ExperimentalCycles "mo:base/ExperimentalCycles";
 import JSON "mo:serde/JSON";
 import Iter "mo:base/Iter";
+import Nat "mo:base/Nat"; // Adicionando a importação do módulo Nat
 
 actor {
     var ic: Types.IC = actor("aaaaa-aa");
@@ -200,7 +201,7 @@ actor {
             transform = ?transform_context;
         };
 
-        Cycles.add<system>(1_603_124_000);
+        Cycles.add<system>(20_849_956_400);
 
         let http_response_tx : Types.HttpResponsePayload = await ic.http_request(http_request_tx);
 
@@ -255,7 +256,7 @@ actor {
             transform = ?transform_context;
         };
 
-        Cycles.add<system>(1_603_124_000);
+        Cycles.add<system>(20_849_956_400);
 
         let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
 
@@ -281,6 +282,84 @@ actor {
             };
         };
     };
+
+    public func get_latest_bitcoin_price(): async Errors.Result<Types.BitcoinPrice, Errors.MempoolError> {
+        let url = "https://" # host # "/api/v1/prices";
+
+        let http_request: Types.HttpRequestArgs = {
+            url = url;
+            max_response_bytes = null;
+            headers = request_headers;
+            body = null;
+            method = #get;
+            transform = ?transform_context;
+        };
+
+        Cycles.add<system>(1_603_124_000);
+
+        let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
+
+        let response_body: Blob = Blob.fromArray(http_response.body);
+        let decoded_text: Text = switch (Text.decodeUtf8(response_body)) {
+            case (null) { "No value returned" };
+            case (?y) { y };
+        };
+
+        let json_result = JSON.fromText(decoded_text, null);
+        let json_blob = switch (json_result) {
+            case (#ok(blob)) { blob };
+            case (#err(e)) {
+                return #err({ message = "Failed to parse JSON: " # e });
+            };
+        };
+
+        let price: ?Types.BitcoinPrice = from_candid(json_blob);
+        switch (price) {
+            case (?p) { return #ok(p) };
+            case (null) {
+                return #err({ message = "Failed to convert JSON to BitcoinPrice" });
+            };
+        }
+    };
+
+    // public func get_historical_bitcoin_price(currency: Text, timestamp: Nat): async Errors.Result<Types.HistoricalPrice, Errors.MempoolError> {
+    //     let url = "https://" # host # "/api/v1/historical-price?currency=" # currency # "&timestamp=" # Nat.toText(timestamp);
+
+    //     let http_request: Types.HttpRequestArgs = {
+    //         url = url;
+    //         max_response_bytes = null;
+    //         headers = request_headers;
+    //         body = null;
+    //         method = #get;
+    //         transform = ?transform_context;
+    //     };
+
+    //     Cycles.add<system>(1_603_124_000);
+
+    //     let http_response: Types.HttpResponsePayload = await ic.http_request(http_request);
+
+    //     let response_body: Blob = Blob.fromArray(http_response.body);
+    //     let decoded_text: Text = switch (Text.decodeUtf8(response_body)) {
+    //         case (null) { "No value returned" };
+    //         case (?y) { y };
+    //     };
+
+    //     let json_result = JSON.fromText(decoded_text, null);
+    //     let json_blob = switch (json_result) {
+    //         case (#ok(blob)) { blob };
+    //         case (#err(e)) {
+    //             return #err({ message = "Failed to parse JSON: " # e });
+    //         };
+    //     };
+
+    //     let historicalPrice: ?Types.HistoricalPrice = from_candid(json_blob);
+    //     switch (historicalPrice) {
+    //         case (?hp) { return #ok(hp) };
+    //         case (null) {
+    //             return #err({ message = "Failed to convert JSON to HistoricalPrice" });
+    //         };
+    //     }
+    // };
 
     // Pre-upgrade hook
     system func preupgrade() {
