@@ -12,12 +12,17 @@ import TransactionInfo from './components/transaction-info/transaction-info'
 import AddressInfo from './components/address-info/address-info'
 import { dayInterval } from '../../../utils/day-interval'
 import HashblockInfo from './components/hashblock-info/hashblock-info'
+import { Tooltip } from '@mui/material'
+import OpenChat from './components/open-chat/open-chat'
+import WhaleHunting from './components/whale-hunting/whale-hunting'
 
 const Home: React.FC = () => {
   const [actual, setActual] = useState('Bitcoin')
   const [actualHashblock, setActualHashblock] = useState(null)
   const [hashblocks, setHashblocks] = useState()
   const [modalOpened, setModalOpened] = useState(false)
+  const [chatOpened, setChatOpened] = useState(false)
+  const [whaleOpened, setWhaleOpened] = useState(false)
   const [hashblockOpened, setHashblockOpened] = useState(false)
   const [info, setInfo] = useState<any>()
   const [data, setData] = useState<NetworkData>(
@@ -96,9 +101,15 @@ const Home: React.FC = () => {
     }
   }
 
+  const handleOpen = (page: string) => {
+    if (page === 'Whale Hunting') {
+      setWhaleOpened(true)
+    }
+  }
+
   return (
     <div className={styles.home}>
-      <Sidebar actual={actual} onChange={(coin) => setActual(coin)} />
+      <Sidebar actual={actual} onChange={(coin) => setActual(coin)} open={(page: string) => handleOpen(page)} />
       <div className={styles.container}>
         <Header onSubmit={handleGetInfo} />
         <Hashblocks coin={actual} data={hashblocks} onSelect={(hashblock: any) => handleHashblock(hashblock)} />
@@ -122,6 +133,29 @@ const Home: React.FC = () => {
 
       {
         hashblockOpened && actualHashblock && <HashblockInfo data={actualHashblock} onClose={() => handleHashblock()} />
+      }
+
+      {
+        chatOpened ? (
+          <OpenChat />
+        )
+          :
+          // <div className={styles.chat} onClick={() => setChatOpened(true)}>
+          //   <Tooltip title="Community" placement="left" >
+          //     <img src="openchat.svg" alt="" />
+          //   </Tooltip>
+          // </div>
+          <a className={styles.chat} href='https://oc.app/group/lejtn-6aaaa-aaaar-bijya-cai/?ref=erjy7-6iaaa-aaaar-bhukq-cai' target='__blank'>
+            <Tooltip title="Community" placement="left" >
+              <img src="openchat.svg" alt="" />
+            </Tooltip>
+          </a>
+      }
+
+      {
+        whaleOpened && (
+          <WhaleHunting onSelect={(id: string) => handleGetInfo('address', id)} onClose={() => setWhaleOpened(false)} />
+        )
       }
     </div>
   )

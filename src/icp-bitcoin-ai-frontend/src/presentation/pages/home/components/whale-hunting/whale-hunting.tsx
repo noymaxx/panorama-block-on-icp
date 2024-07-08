@@ -1,13 +1,11 @@
 import React from 'react'
-import styles from './hashblock-info-styles.module.scss'
-import { Backdrop, Box, CircularProgress, Modal, Tab, Tabs, Tooltip } from '@mui/material'
-import { HashblockProps } from '../../../../components/hashblocks/hashblocks'
-import CustomTabs from '../../../../components/custom-tabs/custom-tabs'
+import styles from './whale-hunting-styles.module.scss'
+import { Backdrop, Box, Modal, Tab, Tabs, Tooltip } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { customId } from '../../../../../utils/custom-id'
 
 type Props = {
-  data: HashblockProps
+  onSelect: (id: string) => void
   onClose: () => void
 }
 
@@ -26,9 +24,20 @@ const style = {
   outline: 'none'
 }
 
-const labels = ["Info", "Address"]
+const data = [
+  {
+    title: "Germany Bitcoin Address",
+    id: "bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z"
+  },
+  {
+    title: "FBI Bitcoin Address",
+    id: "1FfmbHfnpaZjKFvyi1okTjJJusN455paPH"
+  }
+]
 
-const HashblockInfo: React.FC<Props> = ({ data, onClose }: Props) => {
+const labels = ["General", "Custom"]
+
+const WhaleHunting: React.FC<Props> = ({ onSelect, onClose }: Props) => {
   const [value, setValue] = React.useState('0')
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -64,55 +73,40 @@ const HashblockInfo: React.FC<Props> = ({ data, onClose }: Props) => {
           </Box>
 
           <TabPanel className={styles.panel} sx={{ display: value === '0' ? 'flex' : 'none' }} value='0' key={`panel - 0`}>
-            <div className={styles.row}>
-              <div className={styles.item}>
-                <span className={styles.label}>ID</span>
-                <Tooltip title={data.id} placement="top">
-                  <div className={styles.value}>
-                    <p>{customId(data.id)}</p>
+            {
+              data && data.map(((item, index) => {
+                return (
+                  <div className={styles.row} key={`whale-${index}`}>
+                    <div className={styles.item}>
+                      <span className={styles.label}>ID</span>
+                      <Tooltip title={item.id} placement="top">
+                        <div className={`${styles.value} ${styles.id}`} onClick={() => onSelect(item.id)}>
+                          <p>{customId(item.id)}</p>
+                        </div>
+                      </Tooltip>
+                    </div>
+
+                    <div className={styles.item}>
+                      <span className={styles.label}>NAME</span>
+                      <div className={styles.value}>
+                        <p>{item.title}</p>
+                      </div>
+                    </div>
                   </div>
-                </Tooltip>
-              </div>
-
-              <div className={styles.item}>
-                <span className={styles.label}>SIZE</span>
-                <div className={styles.value}>
-                  <p>{(Number(data.size) / 10000).toFixed(0)} KB</p>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.row}>
-              <div className={styles.item}>
-                <span className={styles.label}>TRANSACTIONS</span>
-                <div className={styles.value}>
-                  <p>{data.tx_count} TXS</p>
-                </div>
-              </div>
-
-              <div className={styles.item}>
-                <span className={styles.label}>HEIGHT</span>
-                <div className={styles.value}>
-                  <p>{(Number(data.height) / 1000).toFixed(0)} WU</p>
-                </div>
-              </div>
-            </div>
+                )
+              }))
+            }
           </TabPanel>
 
           <TabPanel className={styles.panel} sx={{ display: value === '1' ? 'flex' : 'none' }} value='1' key={`panel - 1`}>
             <div className={styles.row}>
-              {/* <div className={styles.transaction}>
-                <p>id</p>
-              </div> */}
               To be added soon
             </div>
           </TabPanel>
         </TabContext>
-
-
       </Box>
     </Modal>
   )
 }
 
-export default HashblockInfo
+export default WhaleHunting
