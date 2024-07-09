@@ -28,9 +28,10 @@ const Home: React.FC = () => {
   const [data, setData] = useState<NetworkData>(
     {
       description: "Bitcoin is the first decentralized cryptocurrency. Nodes in the peer-to-peer bitcoin network verify transactions through cryptography and record them in a public distributed ledger, called a blockchain.",
-      transactionsCount: '2020749',
-      transactionsValue: '2980937292746 BTC',
-      address: '12300289033',
+      transactions: '2.487.316 transactions',
+      avgTransactions: '59.267 BTC',
+      transactionsValue: '414.869 BTC',
+      address: '2.118.955 addresses',
       token: 'BTC USD'
     }
   )
