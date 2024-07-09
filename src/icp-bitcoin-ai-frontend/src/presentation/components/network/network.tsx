@@ -3,7 +3,8 @@ import styles from './network-styles.module.scss'
 
 export type NetworkData = {
   description: string
-  transactionsCount: string
+  transactions: string
+  avgTransactions: string
   transactionsValue: string
   address: string
   token: string
@@ -23,19 +24,23 @@ const Network: React.FC<Props> = ({ data }: Props) => {
       <div className={styles.divider}></div>
       <div className={styles.info}>
         <div className={styles.row}>
-          <p className={styles.label}>All Transactions:</p>
-          <p className={styles.value}>{data.transactionsCount}</p>
-        </div>
-        <div className={styles.row}>
-          <p className={styles.label}>Active Address: </p>
+          <p className={styles.label}>Active Address (7 days): </p>
           <p className={styles.value}>{data.address}</p>
         </div>
         <div className={styles.row}>
-          <p className={styles.label}>Transactions Value:</p>
+          <p className={styles.label}>Transactions (7 days):</p>
+          <p className={styles.value}>{data.transactions}</p>
+        </div>
+        <div className={styles.row}>
+          <p className={styles.label}>Transactions Value (Avg per day):</p>
+          <p className={styles.value}>{data.avgTransactions}</p>
+        </div>
+        <div className={styles.row}>
+          <p className={styles.label}>Transactions Value (7 days):</p>
           <p className={styles.value}>{data.transactionsValue}</p>
         </div>
         <div className={styles.row}>
-          <p className={styles.label}>Tokens: </p>
+          <p className={styles.label}>Token:</p>
           <p className={styles.value}>{data.token}</p>
         </div>
       </div>
