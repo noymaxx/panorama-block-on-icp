@@ -1,14 +1,17 @@
-import Types "./TypesMempool";
+import Types "./types/TypesMempool";
 import Errors "./Errors";
 import Debug "mo:base/Debug";
 import Blob "mo:base/Blob";
 import Cycles "mo:base/ExperimentalCycles";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
-import ExperimentalCycles "mo:base/ExperimentalCycles";
 import JSON "mo:serde/JSON";
 import Iter "mo:base/Iter";
 import HashMap "mo:base/HashMap";
+import List "mo:base/List";
+import Error "mo:base/Error";
+import Principal "mo:base/Principal";
+import ExperimentalCycles "mo:base/ExperimentalCycles";
 
 actor {
     var ic: Types.IC = actor("aaaaa-aa");
@@ -16,8 +19,6 @@ actor {
     var current_block_hash: Text = "";
     
     stable var stableBlocks: [Types.BitcoinBlock] = [];
-    stable var stableTransactions: [(Text, [Text])] = [];
-    var transactionMap = HashMap.HashMap<Text, [Text]>(10, Text.equal, Text.hash);
 
     public query func transform(raw: Types.TransformArgs): async Types.CanisterHttpResponsePayload {
         let transformed: Types.CanisterHttpResponsePayload = {
@@ -47,7 +48,23 @@ actor {
 
     public func set_block_hash(block_hash: Text) : async Errors.Result<Text, Errors.MempoolError> {
         current_block_hash := block_hash;
+
+		// Send message to transactions message	
+		await send_message_to_transactions(block_hash);
+
         return #ok("Block hash set successfully");
+    };
+
+    private func send_message_to_transactions(block_hash: Text) : async () {
+        let c = switch (transactions) {
+            case null { return; }; 
+            case (?c) { c };
+        };
+        try {
+            await c.ping(block_hash);
+        } catch (e) {
+            Debug.print("Error: " # Error.message(e));
+        };
     };
 
     public func get_bitcoin_block_info(): async Errors.Result<Types.BitcoinBlock, Errors.MempoolError> {
@@ -148,55 +165,58 @@ actor {
         return #ok(all_blocks);
     };
 
-    public func get_bitcoin_block_transactions() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
-        if (current_block_hash == "") {
-            return #err({ message = "Block hash not set" });
-        };
-        let url_txids = "https://api.mempool.space/api/block/" # current_block_hash # "/txids";
-
-        let http_request_txids : Types.HttpRequestArgs = {
-            url = url_txids;
-            max_response_bytes = null;
-            headers = [];
-            body = null;
-            method = #get;
-            transform = null;
-        };
-
-        Cycles.add<system>(1_603_128_000);
-
-        let http_response_txids : Types.HttpResponsePayload = await ic.http_request(http_request_txids);
-
-        let response_body_txids : Blob = Blob.fromArray(http_response_txids.body);
-        let decoded_text_txids : Text = switch (Text.decodeUtf8(response_body_txids)) {
-            case (null) { "No value returned" };
-            case (?y) { y };
-        };
-
-        let json_result_txids = JSON.fromText(decoded_text_txids, null);
-        let json_blob_txids = switch (json_result_txids) {
-            case (#ok(blob)) { blob };
-            case (#err(e)) {
-                return #err({ message = "Failed to parse JSON: " # e });
-            };
-        };
-
-        let txids : ?Types.Transactions = from_candid(json_blob_txids);
-        switch (txids) {
-            case (?t) {
-                transactionMap.put(current_block_hash, t); 
-                stableTransactions := Iter.toArray(transactionMap.entries());
-                transactionMap := HashMap.fromIter<Text, [Text]>(stableTransactions.vals(), 10, Text.equal, Text.hash);
-                for (key in transactionMap.keys()) {
-                    let _ = transactionMap.remove(key);
-                };
-                return #ok(t) 
-            };
-            case (null) {
-                return #err({ message = "Failed to convert JSON to [Text]" });
-            };
-        };
-    };
+<<<<<<< HEAD
+=======
+//    public func get_bitcoin_block_transactions() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
+//        if (current_block_hash == "") {
+//            return #err({ message = "Block hash not set" });
+//        };
+//        let url_txids = "https://api.mempool.space/api/block/" # current_block_hash # "/txids";
+//
+//        let http_request_txids : Types.HttpRequestArgs = {
+//            url = url_txids;
+//            max_response_bytes = null;
+//            headers = [];
+//            body = null;
+//            method = #get;
+//            transform = null;
+//        };
+//
+//        Cycles.add<system>(1_603_128_000);
+//
+//        let http_response_txids : Types.HttpResponsePayload = await ic.http_request(http_request_txids);
+//
+//        let response_body_txids : Blob = Blob.fromArray(http_response_txids.body);
+//        let decoded_text_txids : Text = switch (Text.decodeUtf8(response_body_txids)) {
+//            case (null) { "No value returned" };
+//            case (?y) { y };
+//        };
+//
+//        let json_result_txids = JSON.fromText(decoded_text_txids, null);
+//        let json_blob_txids = switch (json_result_txids) {
+//            case (#ok(blob)) { blob };
+//            case (#err(e)) {
+//                return #err({ message = "Failed to parse JSON: " # e });
+//            };
+//        };
+//
+//        let txids : ?Types.Transactions = from_candid(json_blob_txids);
+//        switch (txids) {
+//            case (?t) {
+//                transactionMap.put(current_block_hash, t); 
+//                stableTransactions := Iter.toArray(transactionMap.entries());
+//                transactionMap := HashMap.fromIter<Text, [Text]>(stableTransactions.vals(), 10, Text.equal, Text.hash);
+//                for (key in transactionMap.keys()) {
+//                    let _ = transactionMap.remove(key);
+//                };
+//                return #ok(t) 
+//            };
+//            case (null) {
+//                return #err({ message = "Failed to convert JSON to [Text]" });
+//            };
+//        };
+//    };
+>>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
 
     public func get_bitcoin_transaction_info(txid : Text) : async Errors.Result<?Text, Errors.MempoolError> {
 
@@ -300,10 +320,10 @@ actor {
     };
 
     // Post-upgrade hook
-    system func postupgrade() {
-        stableTransactions := [];
-        Debug.print("Executing postupgrade...");
-    };
+//    system func postupgrade() {
+//        stableTransactions := [];
+//        Debug.print("Executing postupgrade...");
+//    };
 
     // Reset memory function
     public func reset_memory(): async Errors.Result<Text, Errors.MempoolError> {
@@ -316,8 +336,116 @@ actor {
         return #ok(stableBlocks);
     };
 
+<<<<<<< HEAD
+	// Multi-canister architecture setup
+=======
     // Function to get the stable transactions
     public query func get_stable_transactions(): async Errors.Result<[(Text, [Text])], Errors.MempoolError> {
         return #ok(stableTransactions);
+	};
+>>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
+
+    type transactions_interface = actor {
+        ping: (Text) -> async ();
+        fetch_transactions: (Text) -> async [Text];
+<<<<<<< HEAD
+		get_bitcoin_block_transactions: (Text) -> async Errors.Result<Types.Transactions, Errors.MempoolError>;
+		get_stable_transactions: () -> async Errors.Result<[(Text, [Text])], Errors.MempoolError>;
     };
+    var transactions = null : ?transactions_interface;
+
+    public func setup_transactions(c : Principal) {
+        transactions := ?(actor (Principal.toText(c)) : transactions_interface);
+    };
+
+    public func call_fetch_transactions(): async Errors.Result<[Text], Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
+
+        let c = switch (transactions) {
+            case null {
+                return #err({ message = "transactions not set up" });
+            };
+            case (?c) { c };
+        };
+
+        let transactions_result = await c.fetch_transactions(current_block_hash);
+
+        return #ok(transactions_result);
+    };
+
+    public func call_get_bitcoin_block_transactions() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
+
+        let c = switch (transactions) {
+            case null {
+                return #err({ message = "transactions not set up" });
+            };
+            case (?c) { c };
+        };
+
+        let transactions_result = await c.get_bitcoin_block_transactions(current_block_hash);
+        
+        return transactions_result;
+    };
+
+    public func call_get_stable_transactions() : async Errors.Result<[(Text, [Text])], Errors.MempoolError> {
+
+        let c = switch (transactions) {
+            case null {
+                return #err({ message = "transactions not set up" });
+            };
+            case (?c) { c };
+        };
+
+        let stable_transactions_result = await c.get_stable_transactions();
+        
+        return stable_transactions_result;
+=======
+		get_bitcoin_block_transactions: (Text) -> async Errors.Result<Types.Transactions, Errors.MempoolError> 
+>>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
+    };
+    var transactions = null : ?transactions_interface;
+
+    public func setup_transactions(c : Principal) {
+        transactions := ?(actor (Principal.toText(c)) : transactions_interface);
+    };
+
+    public func call_fetch_transactions(): async Errors.Result<[Text], Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
+
+        let c = switch (transactions) {
+            case null {
+                return #err({ message = "transactions not set up" });
+            };
+            case (?c) { c };
+        };
+
+        let transactions_result = await c.fetch_transactions(current_block_hash);
+
+        return #ok(transactions_result);
+    };
+
+    public func call_get_bitcoin_block_transactions() : async Errors.Result<Types.Transactions, Errors.MempoolError> {
+        if (current_block_hash == "") {
+            return #err({ message = "Block hash not set" });
+        };
+
+        let c = switch (transactions) {
+            case null {
+                return #err({ message = "transactions not set up" });
+            };
+            case (?c) { c };
+        };
+
+        let transactions_result = await c.get_bitcoin_block_transactions(current_block_hash);
+        
+        return transactions_result;
+    };
+
 };
