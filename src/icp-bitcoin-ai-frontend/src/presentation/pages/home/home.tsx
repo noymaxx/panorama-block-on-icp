@@ -138,19 +138,19 @@ const Home: React.FC = () => {
 
       {
         chatOpened ? (
-          <OpenChat />
+          <OpenChat onClose={() => setChatOpened(false)} />
         )
           :
-          // <div className={styles.chat} onClick={() => setChatOpened(true)}>
-          //   <Tooltip title="Community" placement="left" >
-          //     <img src="openchat.svg" alt="" />
-          //   </Tooltip>
-          // </div>
-          <a className={styles.chat} href='https://oc.app/group/lejtn-6aaaa-aaaar-bijya-cai/?ref=erjy7-6iaaa-aaaar-bhukq-cai' target='__blank'>
+          <div className={styles.chat} onClick={() => setChatOpened(true)}>
             <Tooltip title="Community" placement="left" >
               <img src="openchat.svg" alt="" />
             </Tooltip>
-          </a>
+          </div>
+        // <a className={styles.chat} href='https://oc.app/group/lejtn-6aaaa-aaaar-bijya-cai/?ref=erjy7-6iaaa-aaaar-bhukq-cai' target='__blank'>
+        //   <Tooltip title="Community" placement="left" >
+        //     <img src="openchat.svg" alt="" />
+        //   </Tooltip>
+        // </a>
       }
 
       {
