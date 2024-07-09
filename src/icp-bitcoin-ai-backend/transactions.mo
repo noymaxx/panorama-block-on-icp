@@ -17,10 +17,6 @@ actor {
     var ic: Types.IC = actor("aaaaa-aa");
     var host: Text = "api.mempool.space";
     
-<<<<<<< HEAD
-=======
-    stable var stableBlocks: [Types.BitcoinBlock] = [];
->>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
     stable var stableTransactions: [(Text, [Text])] = [];
     var transactionMap = HashMap.HashMap<Text, [Text]>(10, Text.equal, Text.hash);
 
@@ -50,15 +46,11 @@ actor {
         { name = "User-Agent"; value = "mempool_canister" }
     ];
 	
-<<<<<<< HEAD
 	// Function to test canister connection
-=======
->>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
 	public func ping(block_hash: Text) : async () {
         Debug.print("Received block hash: " # block_hash);
     };
 
-<<<<<<< HEAD
 
 //	public func fetch_transactions(block_hash: Text): async Errors.Result<[?Text], Errors.MempoolError> {
 //			 let txids_result = await get_bitcoin_block_transactions(block_hash);
@@ -85,16 +77,6 @@ actor {
 //				 };
 //			 };
 //	 };
-
-=======
-    public func call_fetch_transactions(block_hash: Text) : async [Text] {
-        Debug.print("Fetching transactions for block hash: " # block_hash);
-        // Implemente a lógica para buscar as transações para o bloco aqui.
-        // Simulando a obtenção de transações para o bloco
-        let transactions: [Text] = ["tx1", "tx2", "tx3"]; // Substitua pela lógica real
-        return transactions;
-    };
->>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
 
     public func get_bitcoin_block_transactions(block_hash: Text) : async Errors.Result<Types.Transactions, Errors.MempoolError> {
         if (block_hash == "") {
@@ -146,7 +128,6 @@ actor {
         };
     };
 
-<<<<<<< HEAD
     // Function to get the stable transactions
     public query func get_stable_transactions(): async Errors.Result<[(Text, [Text])], Errors.MempoolError> {
         return #ok(stableTransactions);
@@ -158,6 +139,4 @@ actor {
         Debug.print("Executing postupgrade...");
     };
 
-=======
->>>>>>> bf93a4b (feat: setup multi-canister for get_bitcoin_block_transactions)
 };
