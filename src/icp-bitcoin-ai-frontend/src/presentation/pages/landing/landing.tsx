@@ -33,6 +33,7 @@ const Landing: React.FC = () => {
       identityProvider: import.meta.env.II_CANISTER_ID, // Certifique-se de definir esta variável de ambiente
       onSuccess: async () => {
         const identity = authClient.getIdentity()
+
         const host = import.meta.env.VITE_HOST ?? undefined;
         const agent = new HttpAgent({ host, identity })
         const actor = createActor(import.meta.env.VITE_MEMPOOL_CANISTER_ID, {

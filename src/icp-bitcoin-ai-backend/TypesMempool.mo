@@ -135,4 +135,33 @@ module Types {
         chain_stats : ChainStats;
         mempool_stats : MempoolStats;
     };
+
+    public type BitcoinPrice = {
+        time: Nat;
+        USD: Nat;
+        EUR: Nat;
+        GBP: Nat;
+        CAD: Nat;
+        CHF: Nat;
+        AUD: Nat;
+        JPY: Nat;
+    };
+
+    public type HistoricalPrice = {
+        prices: [
+            {
+                time: Nat;
+                EUR: Nat;
+                USD: Nat;
+            }
+        ];
+        exchangeRates: {
+            USDEUR: Float;
+            USDGBP: Float;
+            USDCAD: Float;
+            USDCHF: Float;
+            USDAUD: Float;
+            USDJPY: Float;
+        };
+    };
 };
