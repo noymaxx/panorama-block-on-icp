@@ -64,7 +64,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data, onSelect }: Props) => {
   const getDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000)
 
-    return `${minDigit(date.getMonth())}/${minDigit(date.getDay())}/${date.getFullYear()} - ${minDigit(date.getHours())}:${minDigit(date.getMinutes())}:${minDigit(date.getSeconds())}`
+    return `${minDigit(date.getMonth() + 1)}/${minDigit(date.getDate())}/${date.getFullYear()} - ${minDigit(date.getHours())}:${minDigit(date.getMinutes())}:${minDigit(date.getSeconds())}`
   }
 
   const minDigit = (value: number) => {
@@ -121,7 +121,7 @@ const Hashblocks: React.FC<Props> = ({ coin, data, onSelect }: Props) => {
                     <div className={styles.coin}>{getCoin()}</div>
                     <div className={styles.date}>
                       <h3>{coin}</h3>
-                      <p>{getDate(Number(item.timestamp))}</p>
+                      <p>{getDate(parseInt(item.timestamp))}</p>
                     </div>
                   </div>
                 </div>
