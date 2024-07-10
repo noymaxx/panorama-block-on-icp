@@ -16,7 +16,8 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 700,
   maxWidth: '50%',
-  minHeight: 450,
+  height: 450,
+  maxHeight: 450,
   bgcolor: '#0C1541',
   border: '0',
   borderRadius: '4px',
@@ -26,13 +27,29 @@ const style = {
 
 const data = [
   {
-    title: "Germany Bitcoin Address",
-    id: "bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z"
+    id: "bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z",
+    title: "Germany Bitcoin Address"
   },
   {
-    title: "FBI Bitcoin Address",
-    id: "1FfmbHfnpaZjKFvyi1okTjJJusN455paPH"
-  }
+    id: "1FfmbHfnpaZjKFvyi1okTjJJusN455paPH",
+    title: "FBI Bitcoin Address"
+  },
+  {
+    id: "34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo",
+    title: "Binance Bitcoin Address"
+  },
+  {
+    id: "bc1qgdjqv0av3q56jvd82tkdjpy7gdp9ut8tlqmgrpmv24sq90ecnvqqjwvw97",
+    title: "Bitfinex Bitcoin Address"
+  },
+  {
+    id: "3M219KR5vEneNb47ewrPfWyb5jQ2DjxRP6",
+    title: "Binance Bitcoin Address"
+  },
+  {
+    id: "3HcEUguUZ4vyyMAPWDPUDjLqz882jXwMfV",
+    title: "Kraken Bitcoin Address"
+  },
 ]
 
 const labels = ["General", "Custom"]
