@@ -4,6 +4,10 @@
       "main": "src/icp-bitcoin-ai-backend/mempool.mo",
       "type": "motoko"
     },
+	"transactions": {
+      "main": "src/icp-bitcoin-ai-backend/transactions.mo",
+      "type": "motoko"
+   },
     "icp-bitcoin-ai-frontend": {
       "dependencies": [
         "mempool",
