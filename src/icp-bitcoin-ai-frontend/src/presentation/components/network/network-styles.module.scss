@@ -41,7 +41,7 @@
 
       .label {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 14px;
       }
 
       .value {
@@ -74,5 +74,21 @@
     max-width: 240px;
     margin: 20px;
     margin-right: 0;
+
+    .info {
+      .row {
+        .label {
+          font-size: 12px;
+        }
+
+        .value {
+          font-size: 12px;
+        }
+
+        .textField {
+          font-size: 12px;
+        }
+      }
+    }
   }
 }
